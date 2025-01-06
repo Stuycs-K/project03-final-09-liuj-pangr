@@ -1,15 +1,18 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Vh67aNdh)
-# PROJECT NAME HERE
+# ABOVEGROUND SPR TOURNAMENT
 
-### GROUP NAME HERE
+### Senatus PopulusQue Romanus (Scissor Paper Rock)
 
-Group Members Here
-       
+Jason Liu, Renxuan Pang
+
 ### Project Description:
 
-Explain what is this project.
-  
+A server that creates a tournament between joining clients, which will
+initiate a thrilling tournament of rock paper scissors.
+
 ### Instructions:
 
 How does the user install/compile/run the program.
+TBD
 How does the user interact with this program?
+TBD

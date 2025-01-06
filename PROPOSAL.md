@@ -2,28 +2,28 @@
 
 ## Group Members:
 
-names here.
-       
+Jason Liu, Renxuan Pang
+
 # Intentions:
 
-A statement of the problem you are solving and/or a high level description of the project.
-    
+Rock Paper Scissors 2-player tournament (client-server)
+- A tournament bracket made with forking servers where players can input options to decide the victory and move up the bracket (managed by the server, closing the loser’s pipe).
+- The game would start through a command in the server confirming the players' readiness.
+- The server would malloc a list of results, first place to last place and print the results when the game is finished.
+
 # Intended usage:
 
-A description as to how the project will be used (describe the user interface).
-  
+It will be text based, with the terminal taking inputs and outputting instructions to the client from the server.
+
+- the inputs will be letters to represent the actions that the client could take.
+- in the very end the tournament results will be displayed.
+
 # Technical Details:
 
-A description of your technical design. This should include:
-   
-How you will be using the topics covered in class in the project.
-     
-How you are breaking down the project and who is responsible for which parts.
-  
-What data structures you will be using and how.
-     
-What algorithms and /or data structures you will be using, and how.
-    
+Processes, Piping, Signaling, Allocating memory.
+We will break this down into server-sided handling and client-sided handling.
+Bracket handling, Arrays to store data, server-client communication managing, and handshake.
+
 # Intended pacing:
 
-A timeline with expected completion dates of parts of the project.
+We should be done with basic communications in the first 3 days, then 2 more for algorithms regarding game mechanics and bracketing, the the rest for DEBUGGING
