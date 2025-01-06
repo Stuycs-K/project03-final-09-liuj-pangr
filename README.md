@@ -13,6 +13,6 @@ initiate a thrilling tournament of rock paper scissors.
 ### Instructions:
 
 How does the user install/compile/run the program.
-TBD
+ssh onto our machine, find the project folder, Make -> Make client
 How does the user interact with this program?
-TBD
+Typing inputs into the terminal when prompted.
