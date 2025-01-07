@@ -7,7 +7,7 @@ This document must be updated daily by EACH group member.
 ### 2025-01-06 - Brief description
 Basic setup of the project and skeletons added for the files.
 
-### 2024-01-03 - Brief description
+### 2025-01-07 - Brief description
 Expanded description including how much time was spent on task.
 
 ## Jason Liu
