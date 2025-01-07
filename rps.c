@@ -9,18 +9,25 @@ char takeInput(){ //When called asks used for input
     if(length > 1){
       printf("Invalid arguement: too long\n");
     }
-    char attack = input[0];
-    if(strcmp("r", attack) == 0 || strcmp("p", attack) == 0 || strcmp("s", attack) == 0){
-      return attack;
-    }
     else{
-      printf("Invalid arguement: not 'r'(rock), 'p'(paper), or 's'(scissor)\n")
+      char attack = input[0];
+      if(strcmp("r", attack) == 0 || strcmp("p", attack) == 0 || strcmp("s", attack) == 0){
+        return attack;
+      }
+      else{
+        printf("Invalid arguement: not 'r'(rock), 'p'(paper), or 's'(scissor)\n")
+      }
     }
   }
-  return NULL;
+  return "f";
 }
 
 char fight(char p1, char p2){ //Finds winner of RPS game
+  if(strcmp("r",p1) == 0){
 
+  }
+  else{
+    
+  }
   return NULL;
 }
