@@ -1,4 +1,4 @@
-all: client server
+all: client.o server.o
 compile: client.o server.o handshake.o rps.o
 	@gcc -o clientSide client.o handshake.o rps.o
 	@gcc -o serverSide server.o handshake.o rps.o

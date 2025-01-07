@@ -11,8 +11,8 @@
 #ifndef HANDSHAKE_H
 #define WKP "serverPipe"
 
-int server_handshake(int * addr);
-int client_handshake(int * addr);
+int * server_handshake(int * addr);
+int * client_handshake(int * addr);
 void SIGHANDLER(int signo);
 
 #endif

@@ -5,5 +5,7 @@ int handleBracket(){
   return 0;
 }
 int main(){
+  int * addr;
+  addr = server_handshake(addr);
   return 0;
 }
