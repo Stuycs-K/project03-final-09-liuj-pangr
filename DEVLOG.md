@@ -20,3 +20,7 @@ I attended APCS class for 1 period
 
 ### 2025-01-06 - Brief description
 Added in barebones skeletons as well as basic functions for rps, and client.
+
+## Steven Luo
+
+### 2025-01-07 - Joined Group
