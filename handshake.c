@@ -12,7 +12,7 @@ void SIGHANDLER(int signo){//sighandler
 
 
 int * client_handshake(int * addr){ //client handshake
-  char str[512];
+  char str[LINE_SIZE];
   int pid = getpid();
   sprintf(str, "%d", pid);
   mkfifo(str, 0666);
@@ -39,7 +39,7 @@ int * server_handshake(int * addr){ //server handshaking
   if (childID != 0){
     signal(SIGPIPE, SIGHANDLER);
     read(addr[0], &addr[1], 4);
-    char str[512];
+    char str[LINE_SIZE];
     sprintf(str, "%d", addr[1]);
     printf("%s received\n", str);
     int ack = addr[1] + 1;

@@ -6,7 +6,7 @@
 #ifndef RPS_H
 #define RPS_H
 
-char input();
+char takeInput();
 char fight(char p1, char p2);
 
 #endif
