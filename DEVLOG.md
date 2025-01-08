@@ -27,3 +27,4 @@ Added in code for taking inputs and handling battles in rps.c
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
+Created outline for server forking and handling multiple clients
