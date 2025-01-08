@@ -14,6 +14,7 @@
 #ifndef HANDSHAKE_H
 #define HANDSHAKE_H
 
+int * server_setup(int * addr);
 int * server_handshake(int * addr);
 int * client_handshake(int * addr);
 void SIGHANDLER(int signo);
