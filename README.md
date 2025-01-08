@@ -3,7 +3,7 @@
 
 ### Senatus PopulusQue Romanus (Scissor Paper Rock)
 
-Jason Liu, Renxuan Pang
+Jason Liu, Renxuan Pang, Steven Luo
 
 ### Project Description:
 
@@ -13,6 +13,9 @@ initiate a thrilling tournament of rock paper scissors.
 ### Instructions:
 
 How does the user install/compile/run the program.
+
 ssh onto our machine, find the project folder, Make -> Make client
+
 How does the user interact with this program?
+
 Typing inputs into the terminal when prompted.
