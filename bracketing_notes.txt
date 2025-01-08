@@ -1,0 +1,23 @@
+avaliable 
+
+PlayerStruct[a]
+
+PlayerStruct has
+Private Pipe
+Status
+
+PlayerCount = Max
+
+while player count != 1
+	Run through alive players
+	find alive player
+		if another alive player exits
+			write to both request to send
+			wait to read both times
+				handle sigquits for alive players who left
+				tell player won or lose
+				subtract playercount
+				change status in playerstruct
+		else
+			write message telling them get free pass
+
