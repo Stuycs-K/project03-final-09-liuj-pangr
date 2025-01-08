@@ -9,5 +9,10 @@ int main(){
   write(addr[0], &check, 4);
   read(addr[1], &check, 4);
   printf("%d\n", check);
+
+  char p1 = takeInput();
+  char p2 = takeInput();
+  printf("P1 chose %c. P2 chose %c.\n", p1, p2);
+  printf("Result of fight is %c.\n", fight(p1,p2));
   return 0;
 }
