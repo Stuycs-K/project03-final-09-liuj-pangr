@@ -1,4 +1,4 @@
-compile: client.o server.o
+compile: client.o server.o rps.o handshake.o
 	@gcc -o clientSide client.o handshake.o rps.o
 	@gcc -o serverSide server.o handshake.o rps.o
 
@@ -9,16 +9,16 @@ server: serverSide
 	@./serverSide
 
 client.o: client.c handshake.h rps.h
-	@gcc -c client.c
+	@gcc -c -Wall client.c
 
 server.o: server.c handshake.h rps.h
-	@gcc -c server.c
+	@gcc -c -Wall server.c
 
 handshake.o: handshake.c handshake.h
-	@gcc -c handshake.c
+	@gcc -c -Wall handshake.c
 
 rps.o: rps.c rps.h
-	@gcc -c rps.c
+	@gcc -c -Wall rps.c
 
 clean:
 	@rm -f *.o clientSide serverSide
