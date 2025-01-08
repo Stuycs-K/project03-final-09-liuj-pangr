@@ -4,17 +4,16 @@
 int handleBracket(int * addr){
 
   /* Outline
-  The server waits until two clients join.
-  The server forks.
-  The server will receive single client.
-  If the server doesn't receive another connection, this client is the winner.
-  If the server receives a connection, repeat steps.
+	1. The main server waits until enough clients join.
+	2. The server passes one half of clients into a function and the other half to another.
+			In this function, the server forks.
+			If a subserver receives only one client, this client is the winner.
+	3. The server receives one client from both halves.
+	4. The server does the game with both clients.
+	5. The server passes the winner to the superserver and terminates.
+	6. Repeat 2-5 until the main server has a winner.
 
-  The subserver waits until its subservers terminate and two clients have a connection.
-  The subserver blocks until both clients have submitted their results.
-  The subserver compares the two results, writing something to the loser client for the client to terminate.
-  The subserver returns the fd of the winner client to the higher server, before terminating.
-
+	Think of how merge sort is implemented
   */
 
   return 0;
