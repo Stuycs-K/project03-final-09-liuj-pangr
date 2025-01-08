@@ -30,28 +30,29 @@ int * client_handshake(int * addr){ //client handshake
   }
   return addr;
 }
-//addr[0] = from client/to server, addr[1] = to client/from server
-int * server_handshake(int * addr){ //server handshaking
+
+int * server_setup(int * addr) {
   mkfifo(WKP, 0666);
   addr[0] = open(WKP, O_RDONLY);
-  remove(WKP);
-  int childID = fork();
-  if (childID != 0){
-    signal(SIGPIPE, SIGHANDLER);
-    read(addr[0], &addr[1], 4);
-    char str[LINE_SIZE];
-    sprintf(str, "%d", addr[1]);
-    printf("%s received\n", str);
-    int ack = addr[1] + 1;
-    printf("server sent %d\n", ack);
-    addr[1] = open(str, O_WRONLY);
-    write(addr[1], &ack, 4);
-    int finalAck;
-    read(addr[0], &finalAck, 4);
-    if (finalAck != ack - 2){
-      printf("Ack incorrect.");
-      exit(0);
-    }
+  return addr;
+}
+
+//addr[0] = from client/to server, addr[1] = to client/from server
+int * server_handshake(int * addr){ //server handshaking
+  signal(SIGPIPE, SIGHANDLER);
+  read(addr[0], &addr[1], 4);
+  char str[LINE_SIZE];
+  sprintf(str, "%d", addr[1]);
+  printf("%s received\n", str);
+  int ack = addr[1] + 1;
+  printf("server sent %d\n", ack);
+  addr[1] = open(str, O_WRONLY);
+  write(addr[1], &ack, 4);
+  int finalAck;
+  read(addr[0], &finalAck, 4);
+  if (finalAck != ack - 2){
+    printf("Ack incorrect.");
+    exit(0);
   }
   return addr;
 }

@@ -20,21 +20,30 @@ int handleBracket(int addr[][2]){
 }
 int main(){
   // TODO: Make the server wait until enough clients join
-  int addrs[TEMP_MAX][2];
+  // int addrs[TEMP_MAX][2];
   int adr[2];
   int * addr = adr;
-  for (int i = 0; i < TEMP_MAX; i++) { // assuming that the server needs TEMP_MAX to continue, for testing
-    addr = server_handshake(addr);
-    addrs[i][0] = adr[0];
-    addrs[i][1] = adr[1];
+  server_setup(addr);
+  int f = fork();
+  if(f == 0) {
+    server_handshake(int * addr);
+  }
+  else {
+
   }
 
-  for (int i = 0; i < TEMP_MAX; i++) {
-    int check = 300;
-    write(addrs[i][0], &check, 4);
-    read(addrs[i][1], &check, 4);
-    printf("%d\n", check);
-  }
+  // for (int i = 0; i < TEMP_MAX; i++) { // assuming that the server needs TEMP_MAX to continue, for testing
+  //   addr = server_handshake(addr);
+  //   addrs[i][0] = adr[0];
+  //   addrs[i][1] = adr[1];
+  // }
+  //
+  // for (int i = 0; i < TEMP_MAX; i++) {
+  //   int check = 300;
+  //   write(addrs[i][0], &check, 4);
+  //   read(addrs[i][1], &check, 4);
+  //   printf("%d\n", check);
+  // }
   // handleBracket(addr);
 
   return 0;
