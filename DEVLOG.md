@@ -21,6 +21,9 @@ I attended APCS class for 1 period
 ### 2025-01-06 - Brief description
 Added in barebones skeletons as well as basic functions for rps, and client.
 
+### 2025-01-07 - Brief description
+Added in code for taking inputs and handling battles in rps.c
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
