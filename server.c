@@ -24,13 +24,6 @@ int main(){
   int adr[2];
   int * addr = adr;
   server_setup(addr);
-  int f = fork();
-  if(f == 0) {
-    server_handshake(int * addr);
-  }
-  else {
-
-  }
 
   // for (int i = 0; i < TEMP_MAX; i++) { // assuming that the server needs TEMP_MAX to continue, for testing
   //   addr = server_handshake(addr);
