@@ -23,6 +23,7 @@ int main(){
   int addrs[TEMP_MAX][2];
   int adr[2];
   int * addr = adr;
+  
   for (int i = 0; i < TEMP_MAX; i++) { // assuming that the server needs TEMP_MAX to continue, for testing
     addr = server_handshake(addr);
     addrs[i][0] = adr[0];

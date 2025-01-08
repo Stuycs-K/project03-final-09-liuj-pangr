@@ -35,7 +35,7 @@ int * server_handshake(int * addr){ //server handshaking
   mkfifo(WKP, 0666);
   addr[0] = open(WKP, O_RDONLY);
   remove(WKP);
-  int childID = fork();
+
   if (childID != 0){
     signal(SIGPIPE, SIGHANDLER);
     read(addr[0], &addr[1], 4);
