@@ -31,14 +31,13 @@ int * client_handshake(int * addr){ //client handshake
   return addr;
 }
 
-int * server_setup(int * addr) {
+int * server_setup() {
   mkfifo(WKP, 0666);
-  addr[0] = open(WKP, O_RDONLY);
   return addr;
 }
 
 //addr[0] = from client/to server, addr[1] = to client/from server
-int * server_handshake(int * addr){ //server handshaking
+int * server_handshake(struct player client){ //server handshaking
   signal(SIGPIPE, SIGHANDLER);
   read(addr[0], &addr[1], 4);
   char str[LINE_SIZE];
