@@ -8,7 +8,7 @@ This document must be updated daily by EACH group member.
 Basic setup of the project and skeletons added for the files.
 
 ### 2025-01-07 - Brief description
-Expanded description including how much time was spent on task.
+Made test server and connection tested, based on an array address storage system.
 
 ## Jason Liu
 
