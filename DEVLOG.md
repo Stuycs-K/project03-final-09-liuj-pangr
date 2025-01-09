@@ -44,5 +44,7 @@ Discussed how we will handle server and wrote pseudo-code for handling bracketin
 ### 2025-01-07 - Joined Group
 Created outline for server forking and handling multiple clients
 
-### 2025-01-08 - Brief Description
+### 2025-01-09 - Brief Description
+Created system for RPS between two clients.
+TODO: Send info to clients to indicate who won + Get clients to send PID to determine which client pair participated
 
