@@ -15,8 +15,6 @@
 	Think of how merge sort is implemented
  */
 
-struct player { int downstream; int status; };
-
 int main(){
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
@@ -40,5 +38,6 @@ int main(){
     printf("%d\n",list[i].downstream);
     write(list[i].downstream, &message, 4);
   }
+  free(list);
   return 0;
 }

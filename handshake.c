@@ -1,4 +1,5 @@
 #include "handshake.h"
+#include "rps.h"
 
 void SIGHANDLER(int signo){//sighandler
   if (signo == SIGINT){
@@ -32,27 +33,12 @@ int client_handshake(int * myPipe){ //client handshake
   return addr;
 }
 
-<<<<<<< HEAD
-int * server_setup() {
+int server_setup() {
+  int addr = -1;
   mkfifo(WKP, 0666);
-  return addr;
-}
-
-//addr[0] = from client/to server, addr[1] = to client/from server
-int * server_handshake(struct player client){ //server handshaking
-  signal(SIGPIPE, SIGHANDLER);
-  read(addr[0], &addr[1], 4);
-  char str[LINE_SIZE];
-  sprintf(str, "%d", addr[1]);
-  printf("%s received\n", str);
-  int ack = addr[1] + 1;
-  printf("server sent %d\n", ack);
-  addr[1] = open(str, O_WRONLY);
-  write(addr[1], &ack, 4);
-  int finalAck;
-  read(addr[0], &finalAck, 4);
-  if (finalAck != ack - 2){
-    printf("Ack incorrect.");
+  addr = open(WKP, O_RDONLY);
+  if (addr < 0){
+    printf("line 39 error\n");
     exit(0);
   }
   return addr;
@@ -81,6 +67,5 @@ int server_handshake(int * THEWKP){ //server handshaking
     printf("line 65 error\n");
     exit(0);
   }
-  
   return addr;
 }
