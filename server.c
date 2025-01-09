@@ -15,19 +15,30 @@
 	Think of how merge sort is implemented
  */
 
-struct player { int * downstream; int status; };
+struct player { int downstream; int status; };
 
 int main(){
-  struct player list[8];
+  int MYWKP = -1;
+  struct player * list = malloc(sizeof(struct player) * 8);
   char buff[512];
   int current = 0;
+  printf("Looking for clients? input y/n\n");
   while (fgets(buff, 511, stdin)){
-    printf("Looking for clients? input y/n\n");
-    if (strcmp(buff, "y") == 0){
-      list[current] = struct player client;
+    printf("%s\n", buff);
+    if (buff[0] == 'y'){
+      list[current].downstream = server_handshake(&MYWKP);
+      current++;
+      printf("%d\n", current);
     }
+    if (buff[0] == 'n'){
+      break;
+    }
+    printf("Looking for clients? input y/n\n");
   }
-  // server_setup();
-
+  int message = 200;
+  for (int i = 0; i < current; i ++){
+    printf("%d\n",list[i].downstream);
+    write(list[i].downstream, &message, 4);
+  }
   return 0;
 }
