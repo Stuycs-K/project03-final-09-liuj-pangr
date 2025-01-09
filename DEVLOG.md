@@ -10,6 +10,17 @@ Basic setup of the project and skeletons added for the files.
 ### 2025-01-07 - Brief description
 Made test server and connection tested, based on an array address storage system.
 
+### 2025-01-08 - Brief description
+Finished the client await & response system.
+On the way to work on the response collection system.
+
+### 2025-01-09 - Brief description
+
+### 2025-01-xx - Brief description
+
+### 2025-01-xx - Brief description
+
+### 2025-01-xx - Brief description
 ## Jason Liu
 
 ### 2024-01-02 - Brief description
