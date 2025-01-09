@@ -17,6 +17,7 @@ int main(){
     }
     else if (message == READY) {
       char p = takeInput();
+      
       write(serverPipe, &p, sizeof(char));
     }
     else if (message == DONE) {
