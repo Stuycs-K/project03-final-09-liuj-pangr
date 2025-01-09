@@ -44,6 +44,7 @@ int server_setup() {
   return addr;
 }
 
+// BUG: Breaks when multiple clients try to connect at the same time
 //THEWKP = from client/to server, addr = to client/from server
 int server_handshake(int * THEWKP){ //server handshaking
   int addr = -1;

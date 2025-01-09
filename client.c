@@ -16,7 +16,8 @@ int main(){
       printf("You have been connected! Please wait.\n");
     }
     else if (message == READY) {
-      printf("Get ready to play!\n");
+      char p = takeInput();
+      write(serverPipe, &p, sizeof(char));
     }
     message = -1;
   }
