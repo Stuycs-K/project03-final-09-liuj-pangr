@@ -1,22 +1,22 @@
-avaliable 
-
+avaliable variables
 PlayerStruct[a]
 
 PlayerStruct has
 Private Pipe
-Status
+Status - dead or alive
 
-PlayerCount = Max
+created variables
+PlayerCount = total players at start
 
 while player count != 1
-	Run through alive players
-	find alive player
-		if another alive player exits
-			write to both request to send
-			wait to read both times
-				handle sigquits for alive players who left
-				tell player won or lose
-				subtract playercount
+	Run through alive players (for loop of pipes)
+	find alive player (check the struct for their status)
+		if another alive player exits (continue searching through list)
+			write to both request to send (client will prompt user when recieving this)
+			wait to read both times (read will likely be player number followed by choice ie "%d %c"
+				handle sigquits for alive players who left (autowin)
+				tell player won or lose through private pipe (rerun the write thing if tie)
+				subtract playercount to represent loss
 				change status in playerstruct
 		else
 			write message telling them get free pass
