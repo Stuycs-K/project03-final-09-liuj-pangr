@@ -12,8 +12,11 @@ int main(){
   int message = -1;
   while(1){
     read(myPipe, &message, 4);
-    if (message != -1){
-      printf("%d\n", message);
+    if (message == CONNECTED){
+      printf("You have been connected! Please wait.\n");
+    }
+    else if (message == READY) {
+      printf("Get ready to play!\n");
     }
     message = -1;
   }

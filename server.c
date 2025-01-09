@@ -1,6 +1,5 @@
 #include "handshake.h"
 #include "rps.h"
-#define TEMP_MAX 4
 //addr[0] = from client/to server, addr[1] = to client/from server
 /* Outline
 	1. The main server waits until enough clients join.
@@ -18,13 +17,15 @@
 int main(){
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
-  char buff[512];
+  char buff[LINE_SIZE];
   int current = 0;
   printf("Looking for clients? input y/n\n");
+  int connectCode = CONNECTED;
   while (fgets(buff, 511, stdin)){
     printf("%s\n", buff);
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
+      write(list[current].downstream, &connectCode, 4);
       current++;
       printf("%d\n", current);
     }
@@ -33,10 +34,10 @@ int main(){
     }
     printf("Looking for clients? input y/n\n");
   }
-  int message = 200;
+  connectCode = READY;
   for (int i = 0; i < current; i ++){
     printf("%d\n",list[i].downstream);
-    write(list[i].downstream, &message, 4);
+    write(list[i].downstream, &connectCode, 4);
   }
   free(list);
   return 0;

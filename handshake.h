@@ -11,6 +11,9 @@
 #define WKP "serverPipe"
 #define LINE_SIZE 512
 
+#define CONNECTED 0
+#define READY 200
+
 #ifndef HANDSHAKE_H
 #define HANDSHAKE_H
 
