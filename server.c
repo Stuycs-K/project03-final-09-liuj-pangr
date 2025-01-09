@@ -42,13 +42,16 @@ int main(){
 
   char p1;
   char p2;
+  char win;
   for (int i = 0; i < current-1; i++) { // TODO: Manage multiple pairs
     read(MYWKP, buff, 511);
     p1 = buff[0];
     read(MYWKP, buff, 511);
     p2 = buff[0];
-    printf("P1 chose %c. P2 chose %c.\n", p1, p2);
-    printf("Result of fight is %c.\n", fight(p1,p2));
+    snprintf(buff, 512, "P1 chose %c. P2 chose %c.", p1, p2);
+    printf("%s\n", buff);
+    win = fight(p1, p2);
+    printf("Result of fight is %c.\n", win);
   }
 
   free(list);
