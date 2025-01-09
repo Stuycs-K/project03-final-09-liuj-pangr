@@ -2,17 +2,29 @@
 #include "rps.h"
 //addr[0] = from client/to server, addr[1] = to client/from server
 int main(){
-  int adr[2];
-  int * addr = adr;
-  addr = client_handshake(addr);
-  int check = 100;
-  write(addr[0], &check, 4);
-  read(addr[1], &check, 4);
-  printf("%d\n", check);
+  int myPipe = -1;
+  int serverPipe = -1;
+  serverPipe = client_handshake(&myPipe);
+  if (serverPipe < 0){
+    printf("serverpipe error\n");
+    exit(0);
+  }
+  int message = -1;
+  while(1){
+    read(myPipe, &message, 4);
+    if (message == CONNECTED){
+      printf("You have been connected! Please wait.\n");
+    }
+    else if (message == READY) {
+      char p = takeInput();
+      write(serverPipe, &p, sizeof(char));
+    }
+    message = -1;
+  }
 
-  char p1 = takeInput();
-  char p2 = takeInput();
-  printf("P1 chose %c. P2 chose %c.\n", p1, p2);
-  printf("Result of fight is %c.\n", fight(p1,p2));
-  return 0;
+  // char p1 = takeInput();
+  // char p2 = takeInput();
+  // printf("P1 chose %c. P2 chose %c.\n", p1, p2);
+  // printf("Result of fight is %c.\n", fight(p1,p2));
+  // return 0;
 }

@@ -1,6 +1,5 @@
 #include "handshake.h"
 #include "rps.h"
-#define TEMP_MAX 4
 //addr[0] = from client/to server, addr[1] = to client/from server
 /* Outline
 	1. The main server waits until enough clients join.
@@ -14,30 +13,44 @@
 
 	Think of how merge sort is implemented
  */
-int handleBracket(int addr[][2]){
 
-  return 0;
-}
 int main(){
-  // TODO: Make the server wait until enough clients join
-  // int addrs[TEMP_MAX][2];
-  int adr[2];
-  int * addr = adr;
-  server_setup(addr);
+  int MYWKP = -1;
+  struct player * list = malloc(sizeof(struct player) * 8);
+  char buff[LINE_SIZE];
+  int current = 0;
+  printf("Looking for clients? input y/n\n");
+  int connectCode = CONNECTED;
+  while (fgets(buff, 511, stdin)){
+    printf("%s\n", buff);
+    if (buff[0] == 'y'){
+      list[current].downstream = server_handshake(&MYWKP);
+      write(list[current].downstream, &connectCode, 4);
+      current++;
+      printf("%d\n", current);
+    }
+    if (buff[0] == 'n'){
+      break;
+    }
+    printf("Looking for clients? input y/n\n");
+  }
+  connectCode = READY;
+  for (int i = 0; i < current; i ++){
+    printf("%d\n",list[i].downstream);
+    write(list[i].downstream, &connectCode, 4);
+  }
 
-  // for (int i = 0; i < TEMP_MAX; i++) { // assuming that the server needs TEMP_MAX to continue, for testing
-  //   addr = server_handshake(addr);
-  //   addrs[i][0] = adr[0];
-  //   addrs[i][1] = adr[1];
-  // }
-  //
-  // for (int i = 0; i < TEMP_MAX; i++) {
-  //   int check = 300;
-  //   write(addrs[i][0], &check, 4);
-  //   read(addrs[i][1], &check, 4);
-  //   printf("%d\n", check);
-  // }
-  // handleBracket(addr);
+  char p1;
+  char p2;
+  for (int i = 0; i < current-1; i++) { // TODO: Manage multiple pairs
+    read(MYWKP, buff, 511);
+    p1 = buff[0];
+    read(MYWKP, buff, 511);
+    p2 = buff[0];
+    printf("P1 chose %c. P2 chose %c.\n", p1, p2);
+    printf("Result of fight is %c.\n", fight(p1,p2));
+  }
 
+  free(list);
   return 0;
 }
