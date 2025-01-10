@@ -20,20 +20,40 @@ int main(){
   struct player * list = malloc(sizeof(struct player) * 8);
   char buff[LINE_SIZE];
   int current = 0;
-  printf("Looking for clients? input y/n\n");
+
+  printf("Start game? Press enter to start game.\n");
   int connectCode = CONNECTED;
-  while (fgets(buff, 511, stdin)){
-    if (buff[0] == 'y'){
-      list[current].downstream = server_handshake(&MYWKP);
-      write(list[current].downstream, &connectCode, 4);
-      current++;
-      list[current].status = ALIVE;
-    }
-    if (buff[0] == 'n'){
+
+  fd_set server_start_and_join;
+  FD_ZERO(&server_start_and_join);
+  while(current != 8){
+    FD_SET(STDIN_FILENO, &server_start_and_join);
+    int MYWKP = server_setup()
+    FD_SET(MYWKP, &server_start_and_join);
+
+    int i = select(MYWKP+1, &server_start_and_join, NULL, NULL, NULL);
+    if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+      fgets(buff, sizeof(buff), stdin);
       break;
+      remove(WKP);
     }
-    printf("Looking for clients? input y/n\n");
+    if (FD_ISSET(listen_socket, &read_fds)) {
+      list[current].downstream = 
+    }
+
   }
+  // while (fgets(buff, 511, stdin)){
+  //   if (buff[0] == 'y'){
+  //     list[current].downstream = server_handshake(&MYWKP);
+  //     write(list[current].downstream, &connectCode, 4);
+  //     current++;
+  //     list[current].status = ALIVE;
+  //   }
+  //   if (buff[0] == 'n'){
+  //     break;
+  //   }
+  //   printf("Looking for clients? input y/n\n");
+  // }
   connectCode = READY;
   int alive = current;
   char buffplayers[current][20];
