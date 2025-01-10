@@ -8,6 +8,7 @@
 #define READY 200
 #define DONE 100
 #define WIN 300
+#define LOSE 500
 
 #ifndef RPS_H
 #define RPS_H
