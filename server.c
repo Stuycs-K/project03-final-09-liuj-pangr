@@ -52,7 +52,7 @@ int main(){
     printf("%d\n",list[i].downstream);
     write(list[i].downstream, &connectCode, 4);
   }
-	
+
   while(1) {
     int player1FD = getPlayer(&active_fds, &backup_fds);
     int player2FD = getPlayer(&active_fds, &backup_fds);
@@ -74,6 +74,8 @@ int main(){
         break;
       }
     }
+
+    printf("%c %c\n", play1, play2);
 
     char win;
     win = fight(play1, play2);

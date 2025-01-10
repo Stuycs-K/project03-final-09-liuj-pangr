@@ -20,6 +20,9 @@ int client_handshake(int * myPipe){ //client handshake
   mkfifo(str, 0666);
   printf("made pipe %s\n", str);
   addr = open(WKP, O_WRONLY);
+  if(addr < 0) {
+    exit(-1);
+  }
   printf("server pipe online\n");
   write(addr, &pid, 4);
   * myPipe = open(str, O_RDONLY);
@@ -37,11 +40,12 @@ int server_setup() {
   int addr = -1;
   mkfifo(WKP, 0666);
   addr = open(WKP, O_RDONLY);
+  unlink(WKP);
   if (addr < 0){
     printf("line 39 error\n");
     exit(0);
   }
-  unlink(WKP);
+  printf("%d\n", addr);
   return addr;
 }
 
