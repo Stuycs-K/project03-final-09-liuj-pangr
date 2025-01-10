@@ -41,6 +41,7 @@ int server_setup() {
     printf("line 39 error\n");
     exit(0);
   }
+  unlink(WKP);
   return addr;
 }
 
@@ -49,7 +50,6 @@ int server_setup() {
 int server_handshake(int * THEWKP){ //server handshaking
   int addr = -1;
   signal(SIGPIPE, SIGHANDLER);
-  *THEWKP = server_setup();
   read(*THEWKP, &addr, 4);
   char str[LINE_SIZE];
   sprintf(str, "%d", addr);
