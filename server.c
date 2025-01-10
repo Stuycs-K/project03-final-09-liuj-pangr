@@ -5,17 +5,14 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   FD_ZERO(active_fds);
 
   // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
-  active_fds = backup_fds;
+  *active_fds = *backup_fds;
 
-  int selID = select(sizeof(*backup_fds)+1, active_fds, NULL, NULL, 30);
-  for (int i = 0; i < sizeof(backup_fds); i++) {
-    if (FD_ISSET(backup_fds.fd_array[i], &active_fds)) {
-      // client_socket = server_connect(listen_socket);
-      int player_fd = backup_fds.fd_array[i];
-      FD_ZERO(&backup_fds);
-      for (int i = 0; i < sizeof(backup_fds); i++) {
-        backup_fds.fd_array[i] = active_fds.fd_array[i];
-      }
+  int selID = select(sizeof(*backup_fds)+1, active_fds, NULL, NULL, NULL); // add timeval later
+  for (int i = 0; i < sizeof(*backup_fds)+1; i++) {
+    if (FD_ISSET(i, active_fds)) {
+      int player_fd = i;
+      FD_ZERO(backup_fds);
+      *backup_fds = *active_fds;
       return player_fd;
     }
   }
@@ -37,8 +34,8 @@ int main(){
   while (fgets(buff, 511, stdin)){
     printf("%s\n", buff);
     if (buff[0] == 'y'){
-      &MYWKP = server_setup();
-      FD_SET(&MYWKP, &backup_fds);
+      MYWKP = server_setup();
+      FD_SET(MYWKP, &backup_fds);
       list[current].downstream = server_handshake(&MYWKP);
       list[current].upstream = MYWKP;
       write(list[current].downstream, &connectCode, 4);
@@ -55,11 +52,10 @@ int main(){
     printf("%d\n",list[i].downstream);
     write(list[i].downstream, &connectCode, 4);
   }
-
-  int selID;
+	
   while(1) {
-    int player1FD = getPlayer(active_fds, backup_fds);
-    int player2FD = getPlayer(active_fds, backup_fds);
+    int player1FD = getPlayer(&active_fds, &backup_fds);
+    int player2FD = getPlayer(&active_fds, &backup_fds);
 
     char play1;
     char play2;
@@ -80,7 +76,7 @@ int main(){
     }
 
     char win;
-    win = fight(p1, p2);
+    win = fight(play1, play2);
     printf("Result of fight is %c.\n", win);
   }
 
