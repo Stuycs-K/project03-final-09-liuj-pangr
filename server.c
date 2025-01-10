@@ -1,15 +1,13 @@
 #include "handshake.h"
 #include "rps.h"
 
-int getPlayer(fd_set active_fds, fd_set backup_fds) {
-  FD_ZERO(&active_fds);
+int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
+  FD_ZERO(active_fds);
 
   // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
-  for (int i = 0; i < sizeof(backup_fds); i++) {
-    active_fds.fd_array[i] = backup_fds.fd_array[i];
-  }
+  active_fds = backup_fds;
 
-  selID = select(sizeof(backup_fds)+1, &active_fds, NULL, NULL, 30);
+  int selID = select(sizeof(*backup_fds)+1, active_fds, NULL, NULL, 30);
   for (int i = 0; i < sizeof(backup_fds); i++) {
     if (FD_ISSET(backup_fds.fd_array[i], &active_fds)) {
       // client_socket = server_connect(listen_socket);
