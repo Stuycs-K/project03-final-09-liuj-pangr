@@ -39,6 +39,9 @@ Added in code for taking inputs and handling battles in rps.c
 ### 2025-01-08 - Brief description
 Discussed how we will handle server and wrote pseudo-code for handling bracketing
 
+### 2025-01-08 - Brief description
+Pair programmed main tournament loop and then did some testing with select
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
