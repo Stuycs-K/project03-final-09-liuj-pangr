@@ -13,7 +13,8 @@
 
 	Think of how merge sort is implemented
  */
-
+#define ALIVE 1
+#define DEAD 0
 int main(){
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
@@ -22,12 +23,11 @@ int main(){
   printf("Looking for clients? input y/n\n");
   int connectCode = CONNECTED;
   while (fgets(buff, 511, stdin)){
-    printf("%s\n", buff);
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
       write(list[current].downstream, &connectCode, 4);
       current++;
-      printf("%d\n", current);
+      list[current].status = ALIVE;
     }
     if (buff[0] == 'n'){
       break;
@@ -35,9 +35,16 @@ int main(){
     printf("Looking for clients? input y/n\n");
   }
   connectCode = READY;
+  int alive = current;
+  char buffplayers[current][20];
   for (int i = 0; i < current; i ++){
-    printf("%d\n",list[i].downstream);
-    write(list[i].downstream, &connectCode, 4);
+    if (list[i].status == ALIVE){
+      write(list[i].downstream, &connectCode, 4);
+      read(MYWKP, buffplayers[i], 19);
+    }
+  }
+  for (int i = 0; i < current; i +=2){
+    fight(buffplayers[i], buffplayers[i+1]);
   }
 
   char p1;
