@@ -16,6 +16,7 @@
 #define ALIVE 1
 #define DEAD 0
 int main(){
+  signal(SIGPIPE, SIGHANDLER);
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
   char buff[LINE_SIZE];
@@ -26,41 +27,65 @@ int main(){
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
       write(list[current].downstream, &connectCode, 4);
-      current++;
       list[current].status = ALIVE;
+      current++;
     }
     if (buff[0] == 'n'){
+      printf("GAME START!\n");
       break;
     }
     printf("Looking for clients? input y/n\n");
   }
   connectCode = READY;
+  int doneCode = DONE;
+  int winCode = WIN;
+  int loseCode = LOSE;
   int alive = current;
   char buffplayers[current][20];
   for (int i = 0; i < current; i ++){
-    if (list[i].status == ALIVE){
-      write(list[i].downstream, &connectCode, 4);
-      read(MYWKP, buffplayers[i], 19);
+    if (alive == 1){
+      break;
+    }
+
+    for (int i = 0; i < current; i ++){
+      if (list[i].status == ALIVE){
+        write(list[i].downstream, &connectCode, 4);
+        int bytes = read(MYWKP, buffplayers[i], 19);
+      }
+    }
+
+    if (list[i].status == DEAD){
+      i ++;
+    }
+    else {
+      for (int j = i+1; j < current; j ++){
+        if (list[j].status == DEAD){
+          j ++;
+        }
+        else {
+          printf("p1 index:%d, p2 index:%d\n", i, j);
+          char win = fight(buffplayers[i][0], buffplayers[j][0]);
+          if (win == 1) {
+            list[j].status = DEAD;
+            write(list[j].downstream, &loseCode, 4);
+            write(list[i].downstream, &winCode, 4);
+          }
+          else {
+            list[i].status = DEAD;
+            write(list[j].downstream, &winCode, 4);
+            write(list[i].downstream, &loseCode, 4);
+          }
+          printf("Result of fight is %c.\n", win);
+        }
+      }
     }
   }
-  for (int i = 0; i < current; i +=2){
-    fight(buffplayers[i], buffplayers[i+1]);
+  printf("Game finished.\n");
+  for (int i = 0; i < current; i ++){
+    if (list[i].status == ALIVE){
+      write(list[i].downstream, &doneCode, 4);
+    }
   }
-
-  char p1;
-  char p2;
-  char win;
-  for (int i = 0; i < current-1; i++) { // TODO: Manage multiple pairs
-    read(MYWKP, buff, 511);
-    p1 = buff[0];
-    read(MYWKP, buff, 511);
-    p2 = buff[0];
-    snprintf(buff, 512, "P1 chose %c. P2 chose %c.", p1, p2);
-    printf("%s\n", buff);
-    win = fight(p1, p2);
-    printf("Result of fight is %c.\n", win);
-  }
-
   free(list);
   return 0;
 }
