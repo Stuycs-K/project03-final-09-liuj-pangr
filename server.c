@@ -100,5 +100,6 @@ int main(){
     }
   }
   free(list);
+  remove(WKP);
   return 0;
 }
