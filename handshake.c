@@ -53,9 +53,9 @@ int server_handshake(int * THEWKP){ //server handshaking
   read(*THEWKP, &addr, 4);
   char str[LINE_SIZE];
   sprintf(str, "%d", addr);
-  printf("%s received\n", str);
+  printf("client %s received\n", str);
   int ack = addr + 1;
-  printf("server sent %d\n", ack);
+  printf("acknowledgement sent\n");
   addr = open(str, O_WRONLY);
   write(addr, &ack, 4);
   int finalAck;

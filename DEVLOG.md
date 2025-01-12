@@ -15,8 +15,10 @@ Finished the client await & response system.
 On the way to work on the response collection system.
 
 ### 2025-01-09 - Brief description
+Made the basic setups for a bracket system and ready for change towards final product.
 
-### 2025-01-xx - Brief description
+### 2025-01-10 - Brief description
+Made a basic bracketing system, need slight adjustments to finish up.
 
 ### 2025-01-xx - Brief description
 
