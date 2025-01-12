@@ -20,7 +20,8 @@ Made the basic setups for a bracket system and ready for change towards final pr
 ### 2025-01-10 - Brief description
 Made a basic bracketing system, need slight adjustments to finish up.
 
-### 2025-01-xx - Brief description
+### 2025-01-11 - Brief description
+Finished bracketing, added other text optimizations.
 
 ### 2025-01-xx - Brief description
 
