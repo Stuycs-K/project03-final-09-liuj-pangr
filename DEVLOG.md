@@ -45,6 +45,12 @@ Discussed how we will handle server and wrote pseudo-code for handling bracketin
 ### 2025-01-08 - Brief description
 Pair programmed main tournament loop and then did some testing with select
 
+### 2025-01-09 - Brief description
+Started working on transitioning to signal
+
+### 2025-01-12 - Brief description
+Continued working on signal transition
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
