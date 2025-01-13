@@ -1,5 +1,15 @@
 #include "handshake.h"
 #include "rps.h"
+//addr[0] = from client/to server, addr[1] = to client/from server
+/* Outline
+	1. The main server waits until enough clients join.
+	2. The server passes one half of clients into a function and the other half to another.
+			In this function, the server forks.
+			If a subserver receives only one client, this client is the winner.
+	3. The server receives one client from both halves.
+	4. The server does the game with both clients.
+	5. The server passes the winner to the superserver and terminates.
+	6. Repeat 2-5 until the main server has a winner.
 
 	Think of how merge sort is implemented
  */
@@ -10,21 +20,13 @@ int main(){
   signal(SIGINT, SIGHANDLER);
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
-  fd_set active_fds;
-  fd_set backup_fds;
   char buff[LINE_SIZE];
   int current = 0;
-
-  FD_ZERO(&active_fds);
-
   printf("Looking for clients? input y/n\n");
   int connectCode = CONNECTED;
   while (fgets(buff, 511, stdin)){
     if (buff[0] == 'y'){
-      MYWKP = server_setup();
-      FD_SET(MYWKP, &backup_fds);
       list[current].downstream = server_handshake(&MYWKP);
-      list[current].upstream = MYWKP;
       write(list[current].downstream, &connectCode, 4);
       list[current].status = ALIVE;
       current++;
