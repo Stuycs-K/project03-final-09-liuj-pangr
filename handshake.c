@@ -14,17 +14,17 @@ void SIGHANDLER(int signo){//sighandler
 
 int client_handshake(int * myPipe){ //client handshake
   int addr = -1;
+  addr = open(WKP, O_WRONLY);
+  if (addr < 0) {
+    printf("Server pipe offline.\n");
+    exit(0);
+  }
+  printf("Server pipe online.\n");
   char str[LINE_SIZE];
   int pid = getpid();
   sprintf(str, "%d", pid);
   mkfifo(str, 0666);
-  printf("made pipe %s\n", str);
-  addr = open(WKP, O_WRONLY);
-  if (addr < 0) {
-    printf("server pipe not online\n");
-    exit(0);
-  }
-  printf("server pipe online\n");
+  printf("Pipe %s created.\n", str);
   if (write(addr, &pid, 4) < 0) {
     printf("%s\n", strerror(errno));
     exit(errno);
