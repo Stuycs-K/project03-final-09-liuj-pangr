@@ -60,3 +60,6 @@ Created outline for server forking and handling multiple clients
 Created system for RPS between two clients.
 TODO: Send info to clients to indicate who won + Get clients to send PID to determine which client pair participated
 
+### 2025-01-13
+Modified client handshake so that clients are disconnected if the server is not looking for clients
+Worked on signal transition 
