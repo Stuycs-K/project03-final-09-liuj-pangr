@@ -15,10 +15,13 @@ Finished the client await & response system.
 On the way to work on the response collection system.
 
 ### 2025-01-09 - Brief description
+Made the basic setups for a bracket system and ready for change towards final product.
 
-### 2025-01-xx - Brief description
+### 2025-01-10 - Brief description
+Made a basic bracketing system, need slight adjustments to finish up.
 
-### 2025-01-xx - Brief description
+### 2025-01-11 - Brief description
+Finished bracketing, added other text optimizations.
 
 ### 2025-01-xx - Brief description
 
@@ -39,6 +42,15 @@ Added in code for taking inputs and handling battles in rps.c
 ### 2025-01-08 - Brief description
 Discussed how we will handle server and wrote pseudo-code for handling bracketing
 
+### 2025-01-08 - Brief description
+Pair programmed main tournament loop and then did some testing with select
+
+### 2025-01-09 - Brief description
+Started working on transitioning to signal
+
+### 2025-01-12 - Brief description
+Continued working on signal transition
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
@@ -48,3 +60,6 @@ Created outline for server forking and handling multiple clients
 Created system for RPS between two clients.
 TODO: Send info to clients to indicate who won + Get clients to send PID to determine which client pair participated
 
+### 2025-01-13
+Modified client handshake so that clients are disconnected if the server is not looking for clients
+Worked on signal transition 
