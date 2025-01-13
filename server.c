@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "handshake.h"
 #include "rps.h"
 #define ALIVE 1
@@ -11,6 +10,7 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   *active_fds = *backup_fds;
 
   int selID = select(sizeof(*backup_fds)+1, active_fds, NULL, NULL, NULL); // add timeval later
+  printf("%d\n", sizeof(*backup_fds));
   for (int i = 0; i < sizeof(*backup_fds)+1; i++) {
     if (FD_ISSET(i, active_fds)) {
       int player_fd = i;
@@ -38,6 +38,8 @@ int main(){
   while (fgets(buff, 511, stdin)){
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
+      FD_SET(list[current].downstream, &active_fds);
+      FD_SET(list[current].downstream, &backup_fds);
       write(list[current].downstream, &connectCode, 4);
       list[current].status = ALIVE;
       current++;
@@ -58,13 +60,26 @@ int main(){
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
     for (int i = 0; i < current; i ++){
-      if (list[i].status == ALIVE){
-        memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
-        write(list[i].downstream, &connectCode, 4);
-        int bytes = read(MYWKP, buffplayers[i], 19);
-        if (bytes < 0){
-          printf("read err");
-          exit(0);
+      // if (list[i].status == ALIVE){
+      //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
+      //   write(list[i].downstream, &connectCode, 4);
+      //   int bytes = read(MYWKP, buffplayers[i], 19);
+      //   if (bytes < 0){
+      //     printf("read err");
+      //     exit(0);
+      //   }
+      // }
+      int player = getPlayer(&active_fds, &backup_fds);
+      for (int j = 0; j < current; j++) {
+        if (list[j].downstream == player && list[j].status == ALIVE){
+          memset(buffplayers[j], '\0', sizeof(buffplayers[j]));
+          write(list[j].downstream, &connectCode, 4);
+          int bytes = read(MYWKP, buffplayers[j], 19);
+          if (bytes < 0){
+            printf("read err");
+            exit(0);
+          }
+          break;
         }
       }
     }
