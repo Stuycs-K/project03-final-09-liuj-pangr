@@ -23,7 +23,9 @@ Made a basic bracketing system, need slight adjustments to finish up.
 ### 2025-01-11 - Brief description
 Finished bracketing, added other text optimizations.
 
-### 2025-01-xx - Brief description
+### 2025-01-13 - Brief description
+Worked together to make the program ssh-compatible and fixed perm errors.
+Plan on working on tie-breakers.
 
 ## Jason Liu
 
@@ -62,4 +64,4 @@ TODO: Send info to clients to indicate who won + Get clients to send PID to dete
 
 ### 2025-01-13
 Modified client handshake so that clients are disconnected if the server is not looking for clients
-Worked on signal transition 
+Worked on signal transition
