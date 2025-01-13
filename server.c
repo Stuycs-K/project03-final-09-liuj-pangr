@@ -7,6 +7,7 @@
 #define DEAD 0
 int main(){
   signal(SIGPIPE, SIGHANDLER);
+  signal(SIGINT, SIGHANDLER);
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
   fd_set active_fds;
@@ -40,44 +41,56 @@ int main(){
   int loseCode = LOSE;
   int alive = current;
   char buffplayers[current][20];
-  for (int i = 0; i < current; i ++){
-    if (alive == 1){
-      break;
-    }
-
+  while (alive > 1){
+    printf("%d players alive\n", alive);
+    printf("total %d\n", current);
     for (int i = 0; i < current; i ++){
       if (list[i].status == ALIVE){
+        memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
         write(list[i].downstream, &connectCode, 4);
         int bytes = read(MYWKP, buffplayers[i], 19);
+        if (bytes < 0){
+          printf("read err");
+          exit(0);
+        }
       }
     }
-
-    if (list[i].status == DEAD){
-      i ++;
-    }
-    else {
-      for (int j = i+1; j < current; j ++){
-        if (list[j].status == DEAD){
-          j ++;
-        }
-        else {
-          printf("p1 index:%d, p2 index:%d\n", i, j);
-          char win = fight(buffplayers[i][0], buffplayers[j][0]);
-          if (win == 1) {
-            list[j].status = DEAD;
-            write(list[j].downstream, &loseCode, 4);
-            write(list[i].downstream, &winCode, 4);
+    for (int i = 0; i < current; i ++){
+      if (list[i].status == DEAD){
+        //nothing
+      }
+      else {
+        for (int j = i+1; j < current; j ++){
+          if (list[j].status == DEAD){
+            //nothing
           }
           else {
-            list[i].status = DEAD;
-            write(list[j].downstream, &winCode, 4);
-            write(list[i].downstream, &loseCode, 4);
+            printf("p1 index:%d, p2 index:%d\n", i, j);
+            char win = fight(buffplayers[i][0], buffplayers[j][0]);
+            if (win == '1') {
+              list[j].status = DEAD;
+              write(list[j].downstream, &loseCode, 4);
+              write(list[i].downstream, &winCode, 4);
+              alive --;
+            }
+            else {
+              list[i].status = DEAD;
+              write(list[j].downstream, &winCode, 4);
+              write(list[i].downstream, &loseCode, 4);
+              alive --;
+            }
+            printf("Result of fight is %c.\n", win);
+            i = j;
+            j = current;
           }
-          printf("Result of fight is %c.\n", win);
         }
       }
     }
   }
+  for (int i = 0; i < current; i ++){
+    printf("%d\n", list[i].status);
+  }
+
   printf("Game finished.\n");
   for (int i = 0; i < current; i ++){
     if (list[i].status == ALIVE){
@@ -85,5 +98,6 @@ int main(){
     }
   }
   free(list);
+  remove(WKP);
   return 0;
 }
