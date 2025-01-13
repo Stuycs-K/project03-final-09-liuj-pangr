@@ -17,19 +17,26 @@ int client_handshake(int * myPipe){ //client handshake
   addr = open(WKP, O_WRONLY);
   if (addr < 0) {
     printf("Server pipe offline.\n");
+    printf("%s\n", strerror(errno));
     exit(0);
   }
   printf("Server pipe online.\n");
   char str[LINE_SIZE];
   int pid = getpid();
   sprintf(str, "%d", pid);
-  mkfifo(str, 0666);
+  mkfifo(str, 0777);
+  chmod(str, 0777);
   printf("Pipe %s created.\n", str);
   if (write(addr, &pid, 4) < 0) {
     printf("%s\n", strerror(errno));
     exit(errno);
   }
   * myPipe = open(str, O_RDONLY);
+  if (*myPipe < 0) {
+    printf("%s\n", strerror(errno));
+    exit(errno);
+  }
+  // printf("HIT\n");
   remove(str);
   int ack;
   if (read(* myPipe, &ack, 4) < 0) {
@@ -48,7 +55,9 @@ int client_handshake(int * myPipe){ //client handshake
 
 int server_setup() {
   int addr = -1;
-  mkfifo(WKP, 0666);
+  mkfifo(WKP, 0777);
+  chmod(WKP, 0777);
+
   addr = open(WKP, O_RDONLY);
   if (addr < 0){
     printf("line 39 error\n");
