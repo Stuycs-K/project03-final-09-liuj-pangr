@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/select.h>
 
 #define CONNECTED 0
 #define READY 200
