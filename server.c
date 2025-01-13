@@ -65,6 +65,7 @@ int main(){
       // adds all upstreams
     }
     // how to use select and FD_ISET for random amount of players??
+    // I guess I could accept all and then keep accepting until the count hits player count amount?
   }
 
 
