@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 #include "handshake.h"
 #include "rps.h"
+#define ALIVE 1
+#define DEAD 0
 
 int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   FD_ZERO(active_fds);
@@ -20,6 +23,8 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
 }
 
 int main(){
+  signal(SIGPIPE, SIGHANDLER);
+  signal(SIGINT, SIGHANDLER);
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
   fd_set active_fds;
@@ -28,74 +33,84 @@ int main(){
   int current = 0;
 
   FD_ZERO(&active_fds);
-
   printf("Looking for clients? input y/n\n");
   int connectCode = CONNECTED;
   while (fgets(buff, 511, stdin)){
-    printf("%s\n", buff);
     if (buff[0] == 'y'){
-      MYWKP = server_setup();
-      FD_SET(MYWKP, &backup_fds);
       list[current].downstream = server_handshake(&MYWKP);
-      list[current].upstream = MYWKP;
       write(list[current].downstream, &connectCode, 4);
+      list[current].status = ALIVE;
       current++;
-      printf("%d\n", current);
     }
     if (buff[0] == 'n'){
+      printf("GAME START!\n");
       break;
     }
     printf("Looking for clients? input y/n\n");
   }
   connectCode = READY;
+  int doneCode = DONE;
+  int winCode = WIN;
+  int loseCode = LOSE;
+  int alive = current;
+  char buffplayers[current][20];
+  while (alive > 1){
+    printf("%d players alive\n", alive);
+    printf("total %d\n", current);
+    for (int i = 0; i < current; i ++){
+      if (list[i].status == ALIVE){
+        memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
+        write(list[i].downstream, &connectCode, 4);
+        int bytes = read(MYWKP, buffplayers[i], 19);
+        if (bytes < 0){
+          printf("read err");
+          exit(0);
+        }
+      }
+    }
+    for (int i = 0; i < current; i ++){
+      if (list[i].status == DEAD){
+        //nothing
+      }
+      else {
+        for (int j = i+1; j < current; j ++){
+          if (list[j].status == DEAD){
+            //nothing
+          }
+          else {
+            printf("p1 index:%d, p2 index:%d\n", i, j);
+            char win = fight(buffplayers[i][0], buffplayers[j][0]);
+            if (win == '1') {
+              list[j].status = DEAD;
+              write(list[j].downstream, &loseCode, 4);
+              write(list[i].downstream, &winCode, 4);
+              alive --;
+            }
+            else {
+              list[i].status = DEAD;
+              write(list[j].downstream, &winCode, 4);
+              write(list[i].downstream, &loseCode, 4);
+              alive --;
+            }
+            printf("Result of fight is %c.\n", win);
+            i = j;
+            j = current;
+          }
+        }
+      }
+    }
+  }
   for (int i = 0; i < current; i ++){
-    printf("%d\n",list[i].downstream);
-    write(list[i].downstream, &connectCode, 4);
+    printf("%d\n", list[i].status);
   }
 
-  while(1) {
-    int player1FD = getPlayer(&active_fds, &backup_fds);
-    int player2FD = getPlayer(&active_fds, &backup_fds);
-
-    char play1;
-    char play2;
-
-    for (int i = 0; i < 8; i++) {
-      if(list[i].upstream == player1FD) {
-        read(player1FD, buff, 511);
-        play1 = buff[0];
-        break;
-      }
+  printf("Game finished.\n");
+  for (int i = 0; i < current; i ++){
+    if (list[i].status == ALIVE){
+      write(list[i].downstream, &doneCode, 4);
     }
-    for (int i = 0; i < 8; i++) {
-      if(list[i].upstream == player2FD) {
-        read(player2FD, buff, 511);
-        play2 = buff[0];
-        break;
-      }
-    }
-
-    printf("%c %c\n", play1, play2);
-
-    char win;
-    win = fight(play1, play2);
-    printf("Result of fight is %c.\n", win);
   }
-
-  // char p1;
-  // char p2;
-  // char win;
-  // for (int i = 0; i < current-1; i++) { // TODO: Manage multiple pairs
-  //   read(MYWKP, buff, 511);
-  //   p1 = buff[0];
-  //   read(MYWKP, buff, 511);
-  //   p2 = buff[0];
-  //   snprintf(buff, 512, "P1 chose %c. P2 chose %c.", p1, p2);
-  //   printf("%s\n", buff);
-  //   win = fight(p1, p2);
-  //   printf("Result of fight is %c.\n", win);
-  // }
-
   free(list);
+  remove(WKP);
   return 0;
 }

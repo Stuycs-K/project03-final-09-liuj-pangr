@@ -17,18 +17,19 @@ int main(){
     }
     else if (message == READY) {
       char p = takeInput();
+
       write(serverPipe, &p, sizeof(char));
     }
+    else if (message == LOSE) {
+      printf("You lost! Better luck next time.\n");
+      exit(0);
+    }
+    else if (message == WIN) {
+      printf("You won! please stay for the next round.\n");
+    }
     else if (message == DONE) {
-      // read player 1
-      // read player 2
-      // read message
-      if (message == WIN) {
-        // win condition
-      }
-      else {
-        // loss condition
-      }
+      printf("You are the winner to this tournament!! Congratulations!!\n");
+      exit(0);
     }
     message = -1;
   }
