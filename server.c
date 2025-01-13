@@ -69,7 +69,7 @@ int main(){
   }
 
 
-  
+
 
   // while (fgets(buff, 511, stdin)){
   //   if (buff[0] == 'y'){
