@@ -55,15 +55,9 @@ int main(){
       }
     }
     for (int i = 0; i < current; i ++){
-      if (list[i].status == DEAD){
-        //nothing
-      }
-      else {
+      if (list[i].status != DEAD){
         for (int j = i+1; j < current; j ++){
-          if (list[j].status == DEAD){
-            //nothing
-          }
-          else {
+          if (list[j].status != DEAD){
             printf("p1 index:%d, p2 index:%d\n", i, j);
             char win = fight(buffplayers[i][0], buffplayers[j][0]);
             while(win == 't'){
