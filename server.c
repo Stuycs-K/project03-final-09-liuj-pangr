@@ -10,12 +10,13 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   *active_fds = *backup_fds;
 
   int size = sizeof(*backup_fds)/sizeof(int)+1;
-  printf("%d\n", size);
+  // printf("%d\n", size);
   int selID = select(size, active_fds, NULL, NULL, NULL); // add timeval later
   for (int i = 0; i < size; i++) {
     if (FD_ISSET(i, active_fds)) {
-      printf("%d\n", i);
+      printf("File descriptor: %d\n", i);
       int player_fd = i;
+      *backup_fds = *active_fds;
       FD_ZERO(active_fds);
       *active_fds = *backup_fds;
       return player_fd;
@@ -66,7 +67,7 @@ int main(){
       memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       write(list[i].downstream, &connectCode, 4);
     }
-    for (int i = 0; i < alive; i ++){
+    for (int i = 0; i < alive/2; i ++){
       // if (list[i].status == ALIVE){
       //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       //   write(list[i].downstream, &connectCode, 4);
@@ -76,49 +77,85 @@ int main(){
       //     exit(0);
       //   }
       // }
-      int player = getPlayer(&active_fds, &backup_fds);
+      int player1FD = getPlayer(&active_fds, &backup_fds);
+      printf("%d\n", player1FD);
+      int player1I = 0;
       for (int j = 0; j < current; j++) {
-        if (list[j].upstream == player && list[j].status == ALIVE){
+        if (list[j].upstream == player1FD && list[j].status == ALIVE){
           int bytes = read(list[j].upstream, buffplayers[j], 19);
           if (bytes < 0){
             printf("read err");
             exit(0);
           }
+          player1I = j;
           break;
         }
       }
-    }
-    for (int i = 0; i < current; i ++){
-      if (list[i].status == DEAD){
-        //nothing
-      }
-      else {
-        for (int j = i+1; j < current; j ++){
-          if (list[j].status == DEAD){
-            //nothing
+
+      int player2FD = getPlayer(&active_fds, &backup_fds);
+      printf("%d\n", player2FD);
+      int player2I = 0;
+      for (int j = 0; j < current; j++) {
+        if (list[j].upstream == player2FD && list[j].status == ALIVE){
+          int bytes = read(list[j].upstream, buffplayers[j], 19);
+          if (bytes < 0){
+            printf("read err");
+            exit(0);
           }
-          else {
-            printf("p1 index:%d, p2 index:%d\n", i, j);
-            char win = fight(buffplayers[i][0], buffplayers[j][0]);
-            if (win == '1') {
-              list[j].status = DEAD;
-              write(list[j].downstream, &loseCode, 4);
-              write(list[i].downstream, &winCode, 4);
-              alive --;
-            }
-            else {
-              list[i].status = DEAD;
-              write(list[j].downstream, &winCode, 4);
-              write(list[i].downstream, &loseCode, 4);
-              alive --;
-            }
-            printf("Result of fight is %c.\n", win);
-            i = j;
-            j = current;
-          }
+          player2I = j;
+          break;
         }
       }
+
+      int i = player1FD;
+      int j = player2FD;
+      printf("p1 index:%d, p2 index:%d\n", i, j);
+      char win = fight(buffplayers[i][0], buffplayers[j][0]);
+      if (win == '1') {
+        list[j].status = DEAD;
+        write(list[j].downstream, &loseCode, 4);
+        write(list[i].downstream, &winCode, 4);
+        alive --;
+      }
+      else {
+        list[i].status = DEAD;
+        write(list[j].downstream, &winCode, 4);
+        write(list[i].downstream, &loseCode, 4);
+        alive --;
+      }
+      printf("Result of fight is %c.\n", win);
     }
+    // for (int i = 0; i < current; i ++){
+    //   if (list[i].status == DEAD){
+    //     //nothing
+    //   }
+    //   else {
+    //     for (int j = i+1; j < current; j ++){
+    //       if (list[j].status == DEAD){
+    //         //nothing
+    //       }
+    //       else {
+    //         printf("p1 index:%d, p2 index:%d\n", i, j);
+    //         char win = fight(buffplayers[i][0], buffplayers[j][0]);
+    //         if (win == '1') {
+    //           list[j].status = DEAD;
+    //           write(list[j].downstream, &loseCode, 4);
+    //           write(list[i].downstream, &winCode, 4);
+    //           alive --;
+    //         }
+    //         else {
+    //           list[i].status = DEAD;
+    //           write(list[j].downstream, &winCode, 4);
+    //           write(list[i].downstream, &loseCode, 4);
+    //           alive --;
+    //         }
+    //         printf("Result of fight is %c.\n", win);
+    //         i = j;
+    //         j = current;
+    //       }
+    //     }
+    //   }
+    // }
   }
   for (int i = 0; i < current; i ++){
     printf("%d\n", list[i].status);
