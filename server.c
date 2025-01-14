@@ -51,10 +51,7 @@ int main(){
         memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
         write(list[i].downstream, &connectCode, 4);
         int bytes = read(MYWKP, buffplayers[i], 19);
-        if (bytes < 0){
-          printf("read err");
-          exit(0);
-        }
+        if (bytes < 0) err();
       }
     }
     for (int i = 0; i < current; i ++){
@@ -69,6 +66,11 @@ int main(){
           else {
             printf("p1 index:%d, p2 index:%d\n", i, j);
             char win = fight(buffplayers[i][0], buffplayers[j][0]);
+            while(win == 't'){
+              write(list[i].downstream, &connectCode, 4);
+              int bytes = read(MYWKP, buffplayers[i], 19);
+              if (bytes < 0) err();
+            }
             if (win == '1') {
               list[j].status = DEAD;
               write(list[j].downstream, &loseCode, 4);
