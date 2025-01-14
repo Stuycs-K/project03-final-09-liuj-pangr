@@ -1,16 +1,16 @@
 compile: client.o server.o rps.o handshake.o
-	@mkdir executibles
-	@chmod 0777 executibles
+	@mkdir executables
+	@chmod 0777 executables
 	@gcc -o clientSide client.o handshake.o rps.o
 	@gcc -o serverSide server.o handshake.o rps.o
-	@mv clientSide executibles
-	@mv serverSide executibles
+	@mv clientSide executables
+	@mv serverSide executables
 
 client:
-	@./executibles/clientSide
+	@./executables/clientSide
 
 server:
-	@./executibles/serverSide
+	@./executables/serverSide
 
 client.o: client.c handshake.h rps.h
 	@gcc -c -Wall client.c
@@ -26,4 +26,4 @@ rps.o: rps.c rps.h
 
 clean:
 	@rm -f *.o clientSide serverSide
-	@rm -rf executibles
+	@rm -rf executables

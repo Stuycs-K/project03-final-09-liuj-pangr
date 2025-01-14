@@ -9,9 +9,10 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
   *active_fds = *backup_fds;
 
-  int selID = select(sizeof(*backup_fds)+1, active_fds, NULL, NULL, NULL); // add timeval later
-  printf("%d\n", sizeof(*backup_fds));
-  for (int i = 0; i < sizeof(*backup_fds)+1; i++) {
+  int size = sizeof(*backup_fds)/sizeof(int)+1;
+  printf("%d\n", size);
+  int selID = select(size, active_fds, NULL, NULL, NULL); // add timeval later
+  for (int i = 0; i < size; i++) {
     if (FD_ISSET(i, active_fds)) {
       int player_fd = i;
       FD_ZERO(backup_fds);
@@ -69,6 +70,7 @@ int main(){
       //     exit(0);
       //   }
       // }
+      printf("HIT\n");
       int player = getPlayer(&active_fds, &backup_fds);
       for (int j = 0; j < current; j++) {
         if (list[j].downstream == player && list[j].status == ALIVE){
