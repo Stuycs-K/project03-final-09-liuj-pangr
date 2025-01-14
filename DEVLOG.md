@@ -51,6 +51,9 @@ Started working on transitioning to signal
 ### 2025-01-12 - Brief description
 Continued working on signal transition
 
+### 2025-01-13 - Brief description
+We worked in class to make our current file executable; started a branch to work on select.
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
