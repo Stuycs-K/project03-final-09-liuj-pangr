@@ -53,6 +53,9 @@ Started working on transitioning to signal
 ### 2025-01-12 - Brief description
 Continued working on signal transition
 
+### 2025-01-13 - Brief description
+We worked in class to make our current file executable; started a branch to work on select.
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
@@ -64,4 +67,4 @@ TODO: Send info to clients to indicate who won + Get clients to send PID to dete
 
 ### 2025-01-13
 Modified client handshake so that clients are disconnected if the server is not looking for clients
-Worked on signal transition
+Worked on select - Select works, but doesn't solve the problem of "one person holding up entire tournament"
