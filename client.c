@@ -17,8 +17,10 @@ int main(){
     }
     else if (message == READY) {
       char p = takeInput();
-
       write(serverPipe, &p, sizeof(char));
+    }
+    else if (message == TIE) {
+      printf("You tied the opponent.\n");
     }
     else if (message == LOSE) {
       printf("You lost! Better luck next time.\n");

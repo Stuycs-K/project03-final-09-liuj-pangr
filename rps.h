@@ -8,6 +8,7 @@
 #define READY 200
 #define DONE 100
 #define WIN 300
+#define TIE 400
 #define LOSE 500
 #define PAIRED 1
 #define UNPAIRED 0

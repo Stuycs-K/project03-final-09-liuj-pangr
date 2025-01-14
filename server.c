@@ -41,6 +41,7 @@ int main(){
   int doneCode = DONE;
   int winCode = WIN;
   int loseCode = LOSE;
+  int tieCode = TIE;
   int alive = current;
   char buffplayers[current][20];
   while (alive > 1){
@@ -61,9 +62,18 @@ int main(){
             printf("p1 index:%d, p2 index:%d\n", i, j);
             char win = fight(buffplayers[i][0], buffplayers[j][0]);
             while(win == 't'){
+              write(list[i].downstream, &tieCode, 4);
+              write(list[j].downstream, &tieCode, 4);
+
               write(list[i].downstream, &connectCode, 4);
               int bytes = read(MYWKP, buffplayers[i], 19);
               if (bytes < 0) err();
+
+              write(list[j].downstream, &connectCode, 4);
+              bytes = read(MYWKP, buffplayers[j], 19);
+              if (bytes < 0) err();
+              
+              win = fight(buffplayers[i][0], buffplayers[j][0]);
             }
             if (win == '1') {
               list[j].status = DEAD;
