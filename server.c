@@ -1,18 +1,20 @@
 #include "handshake.h"
 #include "rps.h"
-//addr[0] = from client/to server, addr[1] = to client/from server
-/* Outline
-	1. The main server waits until enough clients join.
-	2. The server passes one half of clients into a function and the other half to another.
-			In this function, the server forks.
-			If a subserver receives only one client, this client is the winner.
-	3. The server receives one client from both halves.
-	4. The server does the game with both clients.
-	5. The server passes the winner to the superserver and terminates.
-	6. Repeat 2-5 until the main server has a winner.
 
-	Think of how merge sort is implemented
- */
+//outline
+/*
+The server first sets up the piping for WKP and waits for client pipes. 
+
+The server will ask for connections, when available, the client will be connected.
+  - input y for adding new clients, n to start the game.
+
+The server then loops through the alive players and sends them information about
+the game status, and when receiving the type acknowledgement the clinets then can
+input their controls.
+
+The server will pair up the clients, and handles a bracket and loops through
+until there is one suriver left, which is the winner of the game.
+*/
 #define ALIVE 1
 #define DEAD 0
 int main(){
@@ -72,7 +74,7 @@ int main(){
               write(list[j].downstream, &connectCode, 4);
               bytes = read(MYWKP, buffplayers[j], 19);
               if (bytes < 0) err();
-              
+
               win = fight(buffplayers[i][0], buffplayers[j][0]);
             }
             if (win == '1') {
