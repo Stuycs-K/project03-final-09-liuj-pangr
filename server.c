@@ -14,9 +14,10 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
   int selID = select(size, active_fds, NULL, NULL, NULL); // add timeval later
   for (int i = 0; i < size; i++) {
     if (FD_ISSET(i, active_fds)) {
+      printf("%d\n", i);
       int player_fd = i;
-      FD_ZERO(backup_fds);
-      *backup_fds = *active_fds;
+      FD_ZERO(active_fds);
+      *active_fds = *backup_fds;
       return player_fd;
     }
   }
@@ -39,8 +40,9 @@ int main(){
   while (fgets(buff, 511, stdin)){
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
-      FD_SET(list[current].downstream, &active_fds);
-      FD_SET(list[current].downstream, &backup_fds);
+      list[current].upstream = MYWKP;
+      FD_SET(list[current].upstream, &active_fds);
+      FD_SET(list[current].upstream, &backup_fds);
       write(list[current].downstream, &connectCode, 4);
       list[current].status = ALIVE;
       current++;
@@ -60,7 +62,11 @@ int main(){
   while (alive > 1){
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
-    for (int i = 0; i < current; i ++){
+    for (int i = 0; i < current; i++) {
+      memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
+      write(list[i].downstream, &connectCode, 4);
+    }
+    for (int i = 0; i < alive; i ++){
       // if (list[i].status == ALIVE){
       //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       //   write(list[i].downstream, &connectCode, 4);
@@ -70,13 +76,10 @@ int main(){
       //     exit(0);
       //   }
       // }
-      printf("HIT\n");
       int player = getPlayer(&active_fds, &backup_fds);
       for (int j = 0; j < current; j++) {
-        if (list[j].downstream == player && list[j].status == ALIVE){
-          memset(buffplayers[j], '\0', sizeof(buffplayers[j]));
-          write(list[j].downstream, &connectCode, 4);
-          int bytes = read(MYWKP, buffplayers[j], 19);
+        if (list[j].upstream == player && list[j].status == ALIVE){
+          int bytes = read(list[j].upstream, buffplayers[j], 19);
           if (bytes < 0){
             printf("read err");
             exit(0);

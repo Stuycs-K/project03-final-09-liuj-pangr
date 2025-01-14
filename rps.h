@@ -15,7 +15,7 @@
 #ifndef RPS_H
 #define RPS_H
 
-struct player { int downstream; int status; int paired;};
+struct player { int downstream; int upstream; int status; int paired;};
 
 char takeInput();
 char fight(char p1, char p2);
