@@ -1,4 +1,5 @@
 compile: client.o server.o rps.o handshake.o
+	@rm -rf executables
 	@mkdir executables
 	@chmod 0777 executables
 	@gcc -o clientSide client.o handshake.o rps.o

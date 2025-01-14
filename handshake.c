@@ -3,7 +3,7 @@
 
 void err(){
   printf("error %d\n", errno);
-  printf("%s\n" strerror(errno));
+  printf("%s\n", strerror(errno));
   exit(1);
 }
 
@@ -82,6 +82,7 @@ int server_handshake(int * THEWKP){ //server handshaking
     printf("%s\n", strerror(errno));
     exit(errno);
   }
+  unlink(WKP);
   char str[LINE_SIZE];
   sprintf(str, "%d", addr);
   printf("client %s received\n", str);

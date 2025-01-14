@@ -3,22 +3,24 @@
 #define ALIVE 1
 #define DEAD 0
 
-int getPlayer(fd_set* active_fds, fd_set* backup_fds) {
-  FD_ZERO(active_fds);
+int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
+  // FD_ZERO(active_fds);
 
   // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
-  *active_fds = *backup_fds;
+  // *active_fds = *backup_fds;
 
-  int size = sizeof(*backup_fds)/sizeof(int)+1;
-  // printf("%d\n", size);
-  int selID = select(size, active_fds, NULL, NULL, NULL); // add timeval later
-  for (int i = 0; i < size; i++) {
+  int selID = select(FD_SETSIZE, active_fds, NULL, NULL, NULL); // add timeval later
+  if (selID < 0) {
+    printf("%s\n", strerror(errno));
+    exit(errno);
+  }
+  for (int i = 0; i < FD_SETSIZE; i++) {
     if (FD_ISSET(i, active_fds)) {
       printf("File descriptor: %d\n", i);
       int player_fd = i;
-      *backup_fds = *active_fds;
-      FD_ZERO(active_fds);
-      *active_fds = *backup_fds;
+      // *backup_fds = *active_fds;
+      // FD_ZERO(active_fds);
+      // *active_fds = *backup_fds;
       return player_fd;
     }
   }
@@ -38,14 +40,20 @@ int main(){
   FD_ZERO(&active_fds);
   printf("Looking for clients? input y/n\n");
   int connectCode = CONNECTED;
+  int maxFD = 2;
   while (fgets(buff, 511, stdin)){
     if (buff[0] == 'y'){
       list[current].downstream = server_handshake(&MYWKP);
       list[current].upstream = MYWKP;
+      printf("WKPFD: %d\n", MYWKP);
       FD_SET(list[current].upstream, &active_fds);
       FD_SET(list[current].upstream, &backup_fds);
-      write(list[current].downstream, &connectCode, 4);
+      if (write(list[current].downstream, &connectCode, 4) < 0) {
+        printf("read err");
+        exit(0);
+      }
       list[current].status = ALIVE;
+      maxFD += 2;
       current++;
     }
     if (buff[0] == 'n'){
@@ -77,7 +85,7 @@ int main(){
       //     exit(0);
       //   }
       // }
-      int player1FD = getPlayer(&active_fds, &backup_fds);
+      int player1FD = getPlayer(&active_fds, &backup_fds, maxFD);
       printf("%d\n", player1FD);
       int player1I = 0;
       for (int j = 0; j < current; j++) {
@@ -92,7 +100,9 @@ int main(){
         }
       }
 
-      int player2FD = getPlayer(&active_fds, &backup_fds);
+      printf("HIT\n");
+
+      int player2FD = getPlayer(&active_fds, &backup_fds, maxFD);
       printf("%d\n", player2FD);
       int player2I = 0;
       for (int j = 0; j < current; j++) {
