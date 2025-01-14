@@ -1,6 +1,12 @@
 #include "handshake.h"
 #include "rps.h"
 
+void err(){
+  printf("error %d\n", errno);
+  printf("%s\n" strerror(errno));
+  exit(1);
+}
+
 void SIGHANDLER(int signo){//sighandler
   if (signo == SIGINT){
     remove(WKP);
