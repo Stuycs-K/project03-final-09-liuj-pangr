@@ -57,7 +57,7 @@ Continued working on signal transition
 We worked in class to make our current file executable; started a branch to work on select.
 
 ### 2025-01-14 - Brief description
-Did peer programming with Steven in class, wasn't able to work at home due to project.
+Did peer programming with Steven in class, wasn't able to work at home due to other project.
 
 ## Steven Luo
 
