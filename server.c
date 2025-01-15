@@ -4,19 +4,19 @@
 #define DEAD 0
 
 int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
-  // FD_ZERO(active_fds);
+  FD_ZERO(active_fds);
 
   // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
   // *active_fds = *backup_fds;
+  memcpy(active_fds, backup_fds, sizeof(*backup_fds));
 
-  int selID = select(FD_SETSIZE, active_fds, NULL, NULL, NULL); // add timeval later
+  int selID = select(maxFD+1, active_fds, NULL, NULL, NULL); // add timeval later
   if (selID < 0) {
     printf("%s\n", strerror(errno));
     exit(errno);
   }
-  for (int i = 0; i < FD_SETSIZE; i++) {
+  for (int i = 3; i <= maxFD; i++) {
     if (FD_ISSET(i, active_fds)) {
-      printf("File descriptor: %d\n", i);
       int player_fd = i;
       // *backup_fds = *active_fds;
       // FD_ZERO(active_fds);
@@ -95,12 +95,11 @@ int main(){
             printf("read err");
             exit(0);
           }
+          printf("P1 received %s\n", buffplayers[j]);
           player1I = j;
           break;
         }
       }
-
-      printf("HIT\n");
 
       int player2FD = getPlayer(&active_fds, &backup_fds, maxFD);
       printf("%d\n", player2FD);
@@ -112,6 +111,7 @@ int main(){
             printf("read err");
             exit(0);
           }
+          printf("P2 received %s\n", buffplayers[j]);
           player2I = j;
           break;
         }
@@ -120,7 +120,8 @@ int main(){
       int i = player1FD;
       int j = player2FD;
       printf("p1 index:%d, p2 index:%d\n", i, j);
-      char win = fight(buffplayers[i][0], buffplayers[j][0]);
+
+      char win = fight(buffplayers[i][0], buffplayers[j][0]); // FIXME: Fight doesn't work!
       if (win == '1') {
         list[j].status = DEAD;
         write(list[j].downstream, &loseCode, 4);
