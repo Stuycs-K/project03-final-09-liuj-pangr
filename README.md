@@ -14,8 +14,13 @@ initiate a thrilling tournament of rock paper scissors.
 
 How does the user install/compile/run the program.
 
-ssh onto our machine, find the project folder, Make -> Make client
+The server machine will clone the repo inside their /tmp folder,
+  Then make -> make server
+Client machines ssh onto server machine, find the project folder, make client
 
 How does the user interact with this program?
 
-Typing inputs into the terminal when prompted.
+The server will type y if a new client wants to join, and n to start the game
+(on the server terminal).
+
+When prompted to type their choices for RPS, do so as prompt says.

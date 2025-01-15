@@ -48,10 +48,7 @@ int main(){
       printf("WKPFD: %d\n", MYWKP);
       FD_SET(list[current].upstream, &active_fds);
       FD_SET(list[current].upstream, &backup_fds);
-      if (write(list[current].downstream, &connectCode, 4) < 0) {
-        printf("read err");
-        exit(0);
-      }
+      if (write(list[current].downstream, &connectCode, 4) < 0) err();
       list[current].status = ALIVE;
       maxFD += 2;
       current++;
@@ -91,10 +88,7 @@ int main(){
       for (int j = 0; j < current; j++) {
         if (list[j].upstream == player1FD && list[j].status == ALIVE){
           int bytes = read(list[j].upstream, buffplayers[j], 19);
-          if (bytes < 0){
-            printf("read err");
-            exit(0);
-          }
+          if (bytes < 0) err();
           printf("P1 received %s\n", buffplayers[j]);
           player1I = j;
           break;
@@ -107,10 +101,7 @@ int main(){
       for (int j = 0; j < current; j++) {
         if (list[j].upstream == player2FD && list[j].status == ALIVE){
           int bytes = read(list[j].upstream, buffplayers[j], 19);
-          if (bytes < 0){
-            printf("read err");
-            exit(0);
-          }
+          if (bytes < 0) err();
           printf("P2 received %s\n", buffplayers[j]);
           player2I = j;
           break;

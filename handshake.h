@@ -14,6 +14,7 @@
 #ifndef HANDSHAKE_H
 #define HANDSHAKE_H
 
+void err();
 int server_setup();
 int server_handshake(int * THEWKP);
 int client_handshake(int * myPipe);

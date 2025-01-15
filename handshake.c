@@ -1,13 +1,13 @@
 #include "handshake.h"
 #include "rps.h"
 
-void err(){
+void err(){ //err code
   printf("error %d\n", errno);
   printf("%s\n", strerror(errno));
   exit(1);
 }
 
-void SIGHANDLER(int signo){//sighandler
+void SIGHANDLER(int signo){ //sighandler
   if (signo == SIGINT){
     remove(WKP);
     exit(0);
@@ -42,7 +42,6 @@ int client_handshake(int * myPipe){ //client handshake
     printf("%s\n", strerror(errno));
     exit(errno);
   }
-  // printf("HIT\n");
   remove(str);
   int ack;
   if (read(* myPipe, &ack, 4) < 0) {
@@ -59,7 +58,7 @@ int client_handshake(int * myPipe){ //client handshake
   return addr;
 }
 
-int server_setup() {
+int server_setup() { //sets up the WKP
   int addr = -1;
   mkfifo(WKP, 0777);
   chmod(WKP, 0777);
