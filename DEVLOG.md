@@ -68,3 +68,6 @@ TODO: Send info to clients to indicate who won + Get clients to send PID to dete
 ### 2025-01-13
 Modified client handshake so that clients are disconnected if the server is not looking for clients
 Worked on select - Select works, but doesn't solve the problem of "one person holding up entire tournament"
+
+### 2025-01-14
+Fixed select (I think), but the fighting mechanism is broken
