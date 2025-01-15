@@ -3,6 +3,20 @@
 #define ALIVE 1
 #define DEAD 0
 
+//outline
+/*
+The server first sets up the piping for WKP and waits for client pipes.
+
+The server will ask for connections, when available, the client will be connected.
+  - input y for adding new clients, n to start the game.
+
+The server then loops through the alive players and sends them information about
+the game status, and when receiving the type acknowledgement the clinets then can
+input their controls.
+
+The server will pair up the clients, and handles a bracket and loops through
+until there is one suriver left, which is the winner of the game.
+*/
 int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
   FD_ZERO(active_fds);
 
@@ -11,16 +25,14 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
   memcpy(active_fds, backup_fds, sizeof(*backup_fds));
 
   int selID = select(maxFD+1, active_fds, NULL, NULL, NULL); // add timeval later
-  if (selID < 0) {
-    printf("%s\n", strerror(errno));
-    exit(errno);
-  }
+  if (selID < 0) err();
   for (int i = 3; i <= maxFD; i++) {
     if (FD_ISSET(i, active_fds)) {
       int player_fd = i;
       // *backup_fds = *active_fds;
       // FD_ZERO(active_fds);
       // *active_fds = *backup_fds;
+      printf("SELECTED: %d\n", i);
       return player_fd;
     }
   }
@@ -63,6 +75,7 @@ int main(){
   int doneCode = DONE;
   int winCode = WIN;
   int loseCode = LOSE;
+  int tieCode = TIE;
   int alive = current;
   char buffplayers[current][20];
   while (alive > 1){
@@ -72,7 +85,7 @@ int main(){
       memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       write(list[i].downstream, &connectCode, 4);
     }
-    for (int i = 0; i < alive/2; i ++){
+    while(alive > 1){
       // if (list[i].status == ALIVE){
       //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       //   write(list[i].downstream, &connectCode, 4);
@@ -82,37 +95,51 @@ int main(){
       //     exit(0);
       //   }
       // }
+      int i = 0;
+      int j = 0;
+
       int player1FD = getPlayer(&active_fds, &backup_fds, maxFD);
       printf("%d\n", player1FD);
-      int player1I = 0;
-      for (int j = 0; j < current; j++) {
-        if (list[j].upstream == player1FD && list[j].status == ALIVE){
-          int bytes = read(list[j].upstream, buffplayers[j], 19);
+      for (int x = 0; x < current; x++) {
+        if (list[x].upstream == player1FD && list[x].status == ALIVE){
+          int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
-          printf("P1 received %s\n", buffplayers[j]);
-          player1I = j;
+          printf("P1 received %s\n", buffplayers[x]);
+          i = x;
+          printf("i: %d\n", i);
           break;
         }
       }
 
       int player2FD = getPlayer(&active_fds, &backup_fds, maxFD);
       printf("%d\n", player2FD);
-      int player2I = 0;
-      for (int j = 0; j < current; j++) {
-        if (list[j].upstream == player2FD && list[j].status == ALIVE){
-          int bytes = read(list[j].upstream, buffplayers[j], 19);
+      for (int x = 0; x < current; x++) {
+        if (list[x].upstream == player2FD && list[x].status == ALIVE){
+          int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
-          printf("P2 received %s\n", buffplayers[j]);
-          player2I = j;
+          printf("P2 received %s\n", buffplayers[x]);
+          j = x;
+          printf("j: %d\n", j);
           break;
         }
       }
-
-      int i = player1FD;
-      int j = player2FD;
       printf("p1 index:%d, p2 index:%d\n", i, j);
 
       char win = fight(buffplayers[i][0], buffplayers[j][0]); // FIXME: Fight doesn't work!
+      while(win == 't'){
+        write(list[i].downstream, &tieCode, 4);
+        write(list[j].downstream, &tieCode, 4);
+
+        write(list[i].downstream, &connectCode, 4);
+        int bytes = read(list[i].upstream, buffplayers[i], 19);
+        if (bytes < 0) err();
+
+        write(list[j].downstream, &connectCode, 4);
+        bytes = read(list[j].upstream, buffplayers[j], 19);
+        if (bytes < 0) err();
+
+        win = fight(buffplayers[i][0], buffplayers[j][0]);
+      }
       if (win == '1') {
         list[j].status = DEAD;
         write(list[j].downstream, &loseCode, 4);
