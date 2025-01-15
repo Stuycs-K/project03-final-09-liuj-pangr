@@ -17,13 +17,7 @@ input their controls.
 The server will pair up the clients, and handles a bracket and loops through
 until there is one suriver left, which is the winner of the game.
 */
-int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
-  FD_ZERO(active_fds);
-
-  // https://stackoverflow.com/questions/3661285/how-to-iterate-through-a-fd-set
-  // *active_fds = *backup_fds;
-  memcpy(active_fds, backup_fds, sizeof(*backup_fds));
-
+int getPlayer(fd_set* active_fds, int maxFD) {
   int selID = select(maxFD+1, active_fds, NULL, NULL, NULL); // add timeval later
   if (selID < 0) err();
   for (int i = 3; i <= maxFD; i++) {
@@ -40,7 +34,7 @@ int getPlayer(fd_set* active_fds, fd_set* backup_fds, int maxFD) {
 }
 
 int main(){
-  signal(SIGPIPE, SIGHANDLER);
+  // signal(SIGPIPE, SIGHANDLER);
   signal(SIGINT, SIGHANDLER);
   int MYWKP = -1;
   struct player * list = malloc(sizeof(struct player) * 8);
@@ -98,10 +92,18 @@ int main(){
       int i = 0;
       int j = 0;
 
-      int player1FD = getPlayer(&active_fds, &backup_fds, maxFD);
+      FD_ZERO(&active_fds);
+      for (int q = 0; q < current; i++) {
+        if(list[q].status == ALIVE) {
+          FD_SET(list[q].upstream, &active_fds);
+        }
+      }
+
+      int player1FD = getPlayer(&active_fds, maxFD);
       printf("%d\n", player1FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player1FD && list[x].status == ALIVE){
+          // new status called ACTIVE
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P1 received %s\n", buffplayers[x]);
@@ -111,10 +113,19 @@ int main(){
         }
       }
 
-      int player2FD = getPlayer(&active_fds, &backup_fds, maxFD);
+      FD_ZERO(&active_fds);
+      for (int q = 0; q < current; i++) {
+        if(list[q].status == ALIVE) {
+          FD_SET(list[q].upstream, &active_fds);
+        }
+      }
+
+      int player2FD = getPlayer(&active_fds, maxFD);
       printf("%d\n", player2FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player2FD && list[x].status == ALIVE){
+          // new status called ACTIVE
+          // FD_CLR() perhaps?
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P2 received %s\n", buffplayers[x]);

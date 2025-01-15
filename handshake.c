@@ -74,7 +74,7 @@ int server_setup() { //sets up the WKP
 //THEWKP = from client/to server, addr = to client/from server
 int server_handshake(int * THEWKP){ //server handshaking
   int addr = -1;
-  signal(SIGPIPE, SIGHANDLER);
+  // signal(SIGPIPE, SIGHANDLER);
   *THEWKP = server_setup();
   int bytes = read(*THEWKP, &addr, 4);
   if (bytes < 0) {
