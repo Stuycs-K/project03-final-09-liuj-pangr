@@ -159,6 +159,22 @@ int main(){
         // if (bytes < 0) err();
 
         // win = fight(buffplayers[i][0], buffplayers[j][0]);
+
+        FD_ZERO(&active_fds);
+        FD_SET(player1FD, &active_fds);
+        FD_SET(player2FD, &active_fds);
+        int player = getPlayer(%active_fds, maxFD);
+        // player = first person
+        for (int x = 0; x < current; x++) {
+          if(list[x].upstream == player && list[x].status == ALIVE) {
+            list[x].status = ACTIVE;
+            int bytes = read(list[x].upstream, buffplayers[x], 19);
+            if (bytes < 0) err();
+          }
+        }
+        if(player == player1FD) {
+
+        }
         break;
       }
       if(win == 't') {
