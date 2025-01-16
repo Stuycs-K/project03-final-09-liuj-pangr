@@ -1,7 +1,5 @@
 #include "handshake.h"
 #include "rps.h"
-#define ALIVE 1
-#define DEAD 0
 
 //outline
 /*
@@ -103,20 +101,14 @@ int main(){
       printf("%d\n", player1FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player1FD && list[x].status == ALIVE){
-          // new status called ACTIVE
+          list[x].status = ACTIVE;
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P1 received %s\n", buffplayers[x]);
           i = x;
           printf("i: %d\n", i);
+          FD_CLR(player1FD, &active_fds);
           break;
-        }
-      }
-
-      FD_ZERO(&active_fds);
-      for (int q = 0; q < current; i++) {
-        if(list[q].status == ALIVE) {
-          FD_SET(list[q].upstream, &active_fds);
         }
       }
 
@@ -124,19 +116,19 @@ int main(){
       printf("%d\n", player2FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player2FD && list[x].status == ALIVE){
-          // new status called ACTIVE
-          // FD_CLR() perhaps?
+          list[x].status = ACTIVE;
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P2 received %s\n", buffplayers[x]);
           j = x;
           printf("j: %d\n", j);
+          FD_CLR(player2FD, &active_fds);
           break;
         }
       }
       printf("p1 index:%d, p2 index:%d\n", i, j);
 
-      char win = fight(buffplayers[i][0], buffplayers[j][0]); // FIXME: Fight doesn't work!
+      char win = fight(buffplayers[i][0], buffplayers[j][0]);
       while(win == 't'){
         write(list[i].downstream, &tieCode, 4);
         write(list[j].downstream, &tieCode, 4);
@@ -152,6 +144,7 @@ int main(){
         win = fight(buffplayers[i][0], buffplayers[j][0]);
       }
       if (win == '1') {
+        list[i].status = ALIVE;
         list[j].status = DEAD;
         write(list[j].downstream, &loseCode, 4);
         write(list[i].downstream, &winCode, 4);
@@ -159,6 +152,7 @@ int main(){
       }
       else {
         list[i].status = DEAD;
+        list[j].status = ALIVE;
         write(list[j].downstream, &winCode, 4);
         write(list[i].downstream, &loseCode, 4);
         alive --;

@@ -12,6 +12,9 @@
 #define LOSE 500
 #define PAIRED 1
 #define UNPAIRED 0
+#define ALIVE 1
+#define DEAD 0
+#define ACTIVE 2
 
 #ifndef RPS_H
 #define RPS_H
