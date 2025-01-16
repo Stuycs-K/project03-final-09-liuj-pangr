@@ -69,7 +69,7 @@ We worked in class to make our current file executable; started a branch to work
 ### 2025-01-14 - Brief description
 Did peer programming with Steven in class, wasn't able to work at home due to other project.
 
-### 2025-01-14 - Brief description
+### 2025-01-15 - Brief description
 We all worked on select together as its the only thing left, wasn't able to work at home due to other project.
 
 ## Steven Luo
