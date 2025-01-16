@@ -16,6 +16,13 @@ The server will pair up the clients, and handles a bracket and loops through
 until there is one suriver left, which is the winner of the game.
 */
 int getPlayer(fd_set* active_fds, int maxFD) {
+  for (int i = 0; i < maxFD+1; i++) {
+    if (FD_ISSET(i, active_fds)) {
+      printf("???: %d\n", i);
+    }
+  }
+
+
   int selID = select(maxFD+1, active_fds, NULL, NULL, NULL); // add timeval later
   if (selID < 0) err();
   for (int i = 3; i <= maxFD; i++) {
@@ -91,9 +98,10 @@ int main(){
       int j = 0;
 
       FD_ZERO(&active_fds);
-      for (int q = 0; q < current; i++) {
+      for (int q = 0; q < current; q++) {
         if(list[q].status == ALIVE) {
           FD_SET(list[q].upstream, &active_fds);
+          printf("ADDED %d\n", list[q].upstream);
         }
       }
 
@@ -107,8 +115,16 @@ int main(){
           printf("P1 received %s\n", buffplayers[x]);
           i = x;
           printf("i: %d\n", i);
-          FD_CLR(player1FD, &active_fds);
+          printf("CLEARED %d\n", player1FD);
           break;
+        }
+      }
+
+      FD_ZERO(&active_fds);
+      for (int q = 0; q < current; q++) {
+        if(list[q].status == ALIVE) {
+          FD_SET(list[q].upstream, &active_fds);
+          printf("ADDED %d\n", list[q].upstream);
         }
       }
 
@@ -122,7 +138,6 @@ int main(){
           printf("P2 received %s\n", buffplayers[x]);
           j = x;
           printf("j: %d\n", j);
-          FD_CLR(player2FD, &active_fds);
           break;
         }
       }
