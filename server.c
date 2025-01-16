@@ -61,7 +61,7 @@ int main(){
       if (list[i].status != DEAD){
         for (int j = i+1; j < current; j ++){
           if (list[j].status != DEAD){
-            printf("p1 index:%d, p2 index:%d\n", i, j);
+            // printf("p1 index:%d, p2 index:%d\n", i, j);
             char win = fight(buffplayers[i][0], buffplayers[j][0]);
             while(win == 't'){
               write(list[i].downstream, &tieCode, 4);
@@ -89,7 +89,7 @@ int main(){
               write(list[i].downstream, &loseCode, 4);
               alive --;
             }
-            printf("Result of fight is %c.\n", win);
+            // printf("Result of fight is %c.\n", win);
             i = j;
             j = current;
           }
