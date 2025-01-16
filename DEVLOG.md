@@ -27,6 +27,16 @@ Finished bracketing, added other text optimizations.
 Worked together to make the program ssh-compatible and fixed perm errors.
 Plan on working on tie-breakers.
 
+### 2025-01-14 - Brief description
+Tie breakers work now, going to do some optimizations.
+
+### 2025-01-15 - Brief description
+Code optimized, working version on main.
+Only thing left is the select optimization, besides that all done.
+
+### 2025-01-16 - Brief description
+Helping on select.
+
 ## Jason Liu
 
 ### 2024-01-02 - Brief description
