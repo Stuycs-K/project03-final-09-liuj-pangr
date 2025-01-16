@@ -1,3 +1,4 @@
+// TODO: group 13
 #include "handshake.h"
 #include "rps.h"
 
@@ -105,6 +106,7 @@ int main(){
         }
       }
 
+      //
       int player1FD = getPlayer(&active_fds, maxFD);
       printf("%d\n", player1FD);
       for (int x = 0; x < current; x++) {
@@ -149,14 +151,18 @@ int main(){
         write(list[j].downstream, &tieCode, 4);
 
         write(list[i].downstream, &connectCode, 4);
-        int bytes = read(list[i].upstream, buffplayers[i], 19);
-        if (bytes < 0) err();
+        // int bytes = read(list[i].upstream, buffplayers[i], 19);
+        // if (bytes < 0) err();
 
         write(list[j].downstream, &connectCode, 4);
-        bytes = read(list[j].upstream, buffplayers[j], 19);
-        if (bytes < 0) err();
+        // bytes = read(list[j].upstream, buffplayers[j], 19);
+        // if (bytes < 0) err();
 
-        win = fight(buffplayers[i][0], buffplayers[j][0]);
+        // win = fight(buffplayers[i][0], buffplayers[j][0]);
+        break;
+      }
+      if(win == 't') {
+        continue;
       }
       if (win == '1') {
         list[i].status = ALIVE;
@@ -174,6 +180,7 @@ int main(){
       }
       printf("Result of fight is %c.\n", win);
     }
+    printf("HIT\n");
     // for (int i = 0; i < current; i ++){
     //   if (list[i].status == DEAD){
     //     //nothing
