@@ -3,7 +3,7 @@
 
 //outline
 /*
-The server first sets up the piping for WKP and waits for client pipes. 
+The server first sets up the piping for WKP and waits for client pipes.
 
 The server will ask for connections, when available, the client will be connected.
   - input y for adding new clients, n to start the game.
@@ -96,9 +96,6 @@ int main(){
         }
       }
     }
-  }
-  for (int i = 0; i < current; i ++){
-    printf("%d\n", list[i].status);
   }
 
   printf("Game finished.\n");
