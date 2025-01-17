@@ -17,11 +17,11 @@ The server will pair up the clients, and handles a bracket and loops through
 until there is one suriver left, which is the winner of the game.
 */
 int getPlayer(fd_set* active_fds, int maxFD) {
-  for (int i = 0; i < maxFD+1; i++) {
-    if (FD_ISSET(i, active_fds)) {
-      printf("???: %d\n", i);
-    }
-  }
+  // for (int i = 0; i < maxFD+1; i++) {
+  //   if (FD_ISSET(i, active_fds)) {
+  //     printf("???: %d\n", i);
+  //   }
+  // }
 
 
   int selID = select(maxFD+1, active_fds, NULL, NULL, NULL); // add timeval later
@@ -79,13 +79,21 @@ int main(){
   int alive = current;
   char buffplayers[current][20];
   while (alive > 1){
+  	printf("======= ROUND START =======\n");
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
+    // for (int i = 0; i < current; i++) {
+    //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
+    //   write(list[i].downstream, &connectCode, 4);
+    // }
+
     for (int i = 0; i < current; i++) {
-      memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
-      write(list[i].downstream, &connectCode, 4);
+    	if(list[i].status == ACTIVE) {
+    		list[i].status = ALIVE;
+    	}
     }
-    while(alive > 1){
+    int inactive = alive;
+    while(inactive > 1){
       // if (list[i].status == ALIVE){
       //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       //   write(list[i].downstream, &connectCode, 4);
@@ -102,6 +110,8 @@ int main(){
       for (int q = 0; q < current; q++) {
         if(list[q].status == ALIVE) {
           FD_SET(list[q].upstream, &active_fds);
+          memset(buffplayers[q], '\0', sizeof(buffplayers[i]));
+ 		      write(list[q].downstream, &connectCode, 4);
           printf("ADDED %d\n", list[q].upstream);
         }
       }
@@ -116,8 +126,8 @@ int main(){
           if (bytes < 0) err();
           printf("P1 received %s\n", buffplayers[x]);
           i = x;
-          printf("i: %d\n", i);
-          printf("CLEARED %d\n", player1FD);
+          // printf("i: %d\n", i);
+          // printf("CLEARED %d\n", player1FD);
           break;
         }
       }
@@ -139,7 +149,7 @@ int main(){
           if (bytes < 0) err();
           printf("P2 received %s\n", buffplayers[x]);
           j = x;
-          printf("j: %d\n", j);
+          // printf("j: %d\n", j);
           break;
         }
       }
@@ -163,7 +173,7 @@ int main(){
         FD_ZERO(&active_fds);
         FD_SET(player1FD, &active_fds);
         FD_SET(player2FD, &active_fds);
-        int player = getPlayer(%active_fds, maxFD);
+        int player = getPlayer(&active_fds, maxFD);
         // player = first person
         for (int x = 0; x < current; x++) {
           if(list[x].upstream == player && list[x].status == ALIVE) {
@@ -181,22 +191,22 @@ int main(){
         continue;
       }
       if (win == '1') {
-        list[i].status = ALIVE;
         list[j].status = DEAD;
         write(list[j].downstream, &loseCode, 4);
         write(list[i].downstream, &winCode, 4);
         alive --;
+        inactive-=2;
       }
       else {
         list[i].status = DEAD;
-        list[j].status = ALIVE;
         write(list[j].downstream, &winCode, 4);
         write(list[i].downstream, &loseCode, 4);
         alive --;
+        inactive-=2;
       }
       printf("Result of fight is %c.\n", win);
     }
-    printf("HIT\n");
+    printf("======= ROUND COMPLETE =======\n");
     // for (int i = 0; i < current; i ++){
     //   if (list[i].status == DEAD){
     //     //nothing
