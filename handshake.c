@@ -68,6 +68,7 @@ int server_setup() { //sets up the WKP
     printf("line 39 error\n");
     exit(errno);
   }
+  remove(WKP);
   return addr;
 }
 

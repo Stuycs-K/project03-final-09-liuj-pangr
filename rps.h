@@ -10,13 +10,12 @@
 #define WIN 300
 #define TIE 400
 #define LOSE 500
-#define PAIRED 1
-#define UNPAIRED 0
+#define PAIRED 202
 
 #ifndef RPS_H
 #define RPS_H
 
-struct player { int downstream; int status; int paired;};
+struct player { int downstream; int status; int paired; int upstream;};
 
 char takeInput();
 char fight(char p1, char p2);
