@@ -14,7 +14,7 @@
 #define UNPAIRED 0
 #define ALIVE 1
 #define DEAD 0
-#define ACTIVE 2
+#define SENT 2
 
 #ifndef RPS_H
 #define RPS_H

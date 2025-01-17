@@ -79,7 +79,7 @@ int main(){
   int alive = current;
   char buffplayers[current][20];
   while (alive > 1){
-  	printf("======= ROUND START =======\n");
+  	printf("========== ROUND START ==========\n");
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
     // for (int i = 0; i < current; i++) {
@@ -88,12 +88,17 @@ int main(){
     // }
 
     for (int i = 0; i < current; i++) {
-    	if(list[i].status == ACTIVE) {
+    	if(list[i].status == SENT) {
     		list[i].status = ALIVE;
+        printf("%d\n", i);
     	}
+      if(list[i].status == ALIVE) {
+        memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
+        write(list[i].downstream, &connectCode, 4);
+      }
     }
-    int inactive = alive;
-    while(inactive > 1){
+    int notSent = alive;
+    while(notSent > 0){
       // if (list[i].status == ALIVE){
       //   memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
       //   write(list[i].downstream, &connectCode, 4);
@@ -108,10 +113,14 @@ int main(){
 
       FD_ZERO(&active_fds);
       for (int q = 0; q < current; q++) {
+        if(list[q].status == DEAD) {
+          printf("THIS IS DEAD: %d\n", q);
+        }
+        if(list[q].status == SENT) {
+          printf("THIS IS SENT: %d\n", q);
+        }
         if(list[q].status == ALIVE) {
           FD_SET(list[q].upstream, &active_fds);
-          memset(buffplayers[q], '\0', sizeof(buffplayers[i]));
- 		      write(list[q].downstream, &connectCode, 4);
           printf("ADDED %d\n", list[q].upstream);
         }
       }
@@ -121,7 +130,7 @@ int main(){
       printf("%d\n", player1FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player1FD && list[x].status == ALIVE){
-          list[x].status = ACTIVE;
+          list[x].status = SENT;
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P1 received %s\n", buffplayers[x]);
@@ -144,7 +153,7 @@ int main(){
       printf("%d\n", player2FD);
       for (int x = 0; x < current; x++) {
         if (list[x].upstream == player2FD && list[x].status == ALIVE){
-          list[x].status = ACTIVE;
+          list[x].status = SENT;
           int bytes = read(list[x].upstream, buffplayers[x], 19);
           if (bytes < 0) err();
           printf("P2 received %s\n", buffplayers[x]);
@@ -177,7 +186,7 @@ int main(){
         // player = first person
         for (int x = 0; x < current; x++) {
           if(list[x].upstream == player && list[x].status == ALIVE) {
-            list[x].status = ACTIVE;
+            list[x].status = SENT;
             int bytes = read(list[x].upstream, buffplayers[x], 19);
             if (bytes < 0) err();
           }
@@ -195,18 +204,18 @@ int main(){
         write(list[j].downstream, &loseCode, 4);
         write(list[i].downstream, &winCode, 4);
         alive --;
-        inactive-=2;
+        notSent-=2;
       }
       else {
         list[i].status = DEAD;
         write(list[j].downstream, &winCode, 4);
         write(list[i].downstream, &loseCode, 4);
         alive --;
-        inactive-=2;
+        notSent-=2;
       }
-      printf("Result of fight is %c.\n", win);
+      printf("===== Result of fight is %c. =====\n", win);
     }
-    printf("======= ROUND COMPLETE =======\n");
+    printf("========== ROUND COMPLETE ==========\n");
     // for (int i = 0; i < current; i ++){
     //   if (list[i].status == DEAD){
     //     //nothing
@@ -245,7 +254,7 @@ int main(){
 
   printf("Game finished.\n");
   for (int i = 0; i < current; i ++){
-    if (list[i].status == ALIVE){
+    if (list[i].status == SENT){
       write(list[i].downstream, &doneCode, 4);
     }
   }
