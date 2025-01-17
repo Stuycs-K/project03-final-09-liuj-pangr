@@ -90,3 +90,12 @@ Worked on select - Select works, but doesn't solve the problem of "one person ho
 
 ### 2025-01-14
 Fixed select (I think), but the fighting mechanism is broken
+
+### 2025-01-15
+Worked together to try to fix select / round management errors
+
+### 2025-01-16
+Tried to fix select / round management errors again
+
+### 2025-01-17
+Tried to fix round management errors
