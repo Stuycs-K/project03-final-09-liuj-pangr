@@ -72,6 +72,9 @@ Did peer programming with Steven in class, wasn't able to work at home due to ot
 ### 2025-01-15 - Brief description
 We all worked on select together as its the only thing left, wasn't able to work at home due to other project.
 
+### 2025-01-15 - Brief description
+We worked together in class to test select, got it to work but overall game loop broke and also tie handling broke, wasn't able to work at home due to other project.
+
 ## Steven Luo
 
 ### 2025-01-07 - Joined Group
