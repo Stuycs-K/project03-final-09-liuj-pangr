@@ -37,6 +37,9 @@ Only thing left is the select optimization, besides that all done.
 ### 2025-01-16 - Brief description
 Helping on select.
 
+### 2025-01-17 - Brief description
+Decided to write my version of code with select implemented, it works! 
+
 ## Jason Liu
 
 ### 2024-01-02 - Brief description
