@@ -69,8 +69,11 @@ We worked in class to make our current file executable; started a branch to work
 ### 2025-01-14 - Brief description
 Did peer programming with Steven in class, wasn't able to work at home due to other project.
 
-### 2025-01-14 - Brief description
+### 2025-01-15 - Brief description
 We all worked on select together as its the only thing left, wasn't able to work at home due to other project.
+
+### 2025-01-15 - Brief description
+We worked together in class to test select, got it to work but overall game loop broke and also tie handling broke, wasn't able to work at home due to other project.
 
 ## Steven Luo
 
@@ -87,3 +90,12 @@ Worked on select - Select works, but doesn't solve the problem of "one person ho
 
 ### 2025-01-14
 Fixed select (I think), but the fighting mechanism is broken
+
+### 2025-01-15
+Worked together to try to fix select / round management errors
+
+### 2025-01-16
+Tried to fix select / round management errors again
+
+### 2025-01-17
+Tried to fix round management errors
