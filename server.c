@@ -169,6 +169,10 @@ int main(){
         write(list[i].downstream, &tieCode, 4);
         write(list[j].downstream, &tieCode, 4);
 
+        FD_ZERO(&active_fds);
+        FD_SET(player1FD, &active_fds);
+        FD_SET(player2FD, &active_fds);
+
         write(list[i].downstream, &connectCode, 4);
         // int bytes = read(list[i].upstream, buffplayers[i], 19);
         // if (bytes < 0) err();
@@ -179,25 +183,46 @@ int main(){
 
         // win = fight(buffplayers[i][0], buffplayers[j][0]);
 
-        FD_ZERO(&active_fds);
-        FD_SET(player1FD, &active_fds);
-        FD_SET(player2FD, &active_fds);
-        int player = getPlayer(&active_fds, maxFD);
-        // player = first person
+        int player1FD = getPlayer(&active_fds, maxFD);
+        printf("%d\n", player1FD);
         for (int x = 0; x < current; x++) {
-          if(list[x].upstream == player && list[x].status == ALIVE) {
+          if (list[x].upstream == player1FD && list[x].status == ALIVE){
+            printf("1FD: %d\n", x);
             list[x].status = SENT;
             int bytes = read(list[x].upstream, buffplayers[x], 19);
             if (bytes < 0) err();
+            printf("P1 received %s\n", buffplayers[x]);
+            i = x;
+            // printf("i: %d\n", i);
+            // printf("CLEARED %d\n", player1FD);
+            break;
           }
         }
-        if(player == player1FD) {
 
+        FD_ZERO(&active_fds);
+        if(player == player1FD) {
+          
         }
-        break;
-      }
-      if(win == 't') {
-        continue;
+        FD_SET(player1FD, &active_fds);
+        FD_SET(player2FD, &active_fds);
+
+        int player2FD = getPlayer(&active_fds, maxFD);
+        printf("%d\n", player2FD);
+        for (int x = 0; x < current; x++) {
+          if (list[x].upstream == player2FD && list[x].status == ALIVE){
+            list[x].status = SENT;
+            int bytes = read(list[x].upstream, buffplayers[x], 19);
+            if (bytes < 0) err();
+            printf("P2 received %s\n", buffplayers[x]);
+            j = x;
+            // printf("j: %d\n", j);
+            break;
+          }
+        }
+        printf("p1 index:%d, p2 index:%d\n", i, j);
+
+        win = fight(buffplayers[i][0], buffplayers[j][0]);
+        printf("OPS: %c %c |||| WIN: %c\n", buffplayers[i][0], buffplayers[j][0], win);
       }
       if (win == '1') {
         list[j].status = DEAD;
