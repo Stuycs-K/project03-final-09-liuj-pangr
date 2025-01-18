@@ -50,9 +50,11 @@ int main(){
   int tieCode = TIE;
   int passCode = PASS;
   int alive = current;
+  int survivors = current;
   char buffplayers[current][20];
 
   while (alive > 1){
+    survivors = alive;
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
     
@@ -69,7 +71,7 @@ int main(){
     int grouped = 0;
     char buff[20];
     int skipped = -1;
-    while(grouped < alive){
+    while(grouped < survivors){
       if (grouped + 1 == alive){
         for (int i = 0; i < current; i ++){
           if (list[i].paired == 0){
