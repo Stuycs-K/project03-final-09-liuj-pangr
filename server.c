@@ -72,7 +72,7 @@ int main(){
     char buff[20];
     int skipped = -1;
     while(grouped < survivors){
-      if (grouped + 1 == alive){
+      if (grouped + 1 == survivors){
         for (int i = 0; i < current; i ++){
           if (list[i].paired == 0){
             skipped = i;
