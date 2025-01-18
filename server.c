@@ -48,7 +48,6 @@ int main(){
   int winCode = WIN;
   int loseCode = LOSE;
   int tieCode = TIE;
-  int pairedCode = PAIRED;
   int alive = current;
   char buffplayers[current][20];
   while (alive > 1){
