@@ -51,34 +51,32 @@ int main(){
   int passCode = PASS;
   int alive = current;
   char buffplayers[current][20];
-  
+
   while (alive > 1){
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
-    int passed = -1;
-    if (alive % 2 != 0){
-      for (int i = 0; i < current; i ++){
-        if (list[i].status == ALIVE){
-          write(list[i].downstream, &passCode, 4);
-          passed = i;
-          break;
-        }
-      }
-    }
     
     for (int i = 0; i < current; i ++){
-      if (list[i].status == ALIVE && i != passed){
+      if (list[i].status == ALIVE){
         memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
         write(list[i].downstream, &connectCode, 4);
       }
     }
-    passed = -1;
     
     int activePlayers[2];
     int ready = 0;
     int AWAIT = 0;
     int grouped = 0;
+    char buff[20];
+    int skipped = -1;
     while(grouped < alive){
+      if (grouped + 1 == alive){
+        for (int i = 0; i < current; i ++){
+          if (list[i].paired == 0){
+            skipped = i;
+          }
+        }
+      }
       while (ready < 2){
         FD_ZERO(&playerFds);
         if (AWAIT == 0){
@@ -92,6 +90,12 @@ int main(){
 
         for (int i = 0; i < current; i ++){
           if (list[i].paired == 0 && FD_ISSET(list[i].upstream, &playerFds)){
+            if (i == skipped){
+              read(list[i].upstream, &buff, 19);
+              write(list[i].downstream, &passCode, 4);
+              ready = 2;
+              break;
+            }
             AWAIT = 0;
             read(list[i].upstream, buffplayers[i], 19);
             activePlayers[ready] = i;
