@@ -9,7 +9,7 @@ Jason Liu, Renxuan Pang, Steven Luo
 Rock Paper Scissors 1v1 tournament (client-server)
 - A tournament bracket made with a set of pipes, with the server listening to client inputs and sending them instructions about the game.
 - The game would start through a command in the server confirming the players' readiness.
-- The server would malloc a list of players (structs), which stores all the player data. The results and losses of the game are calculated as the fights happen. Dead players are ignored and winners continue.
+- The server would malloc a list of players (structs, MAX PLAYER 8), which stores all the player data. The results and losses of the game are calculated as the fights happen. Dead players are ignored and winners continue.
 
 # Intended usage:
 
@@ -20,9 +20,11 @@ It will be text based, with the terminal taking inputs and outputting instructio
 
 # Technical Details:
 
-Processes, mallocing, Signaling, Allocating memory, pipes.
+Ideas involved: Processes, Mallocing, Signaling, Allocating memory, pipes, select.
+
 We will break this down into server-sided handling and client-sided handling.
-Bracket handling, Arrays to store data, server-client communication managing, and handshake.
+
+Details include: Bracket handling, Arrays to store data, server-client communication managing, (server-client select communication), and handshake.
 
 # Intended pacing:
 

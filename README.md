@@ -24,3 +24,15 @@ The server will type y if a new client wants to join, and n to start the game
 (on the server terminal).
 
 When prompted to type their choices for RPS, do so as prompt says.
+
+## Some Behaviors of note:
+DEFAULT MAX PLAYERS: 8
+You can start a tournament with any amount of players less than/equal to max. 
+
+You should be able to add more players to the game by changing the size of list in line 26 of server.c
+
+If the game ends up resulting in an odd number of players, the last player to participate will get a free pass, skipping to the next phase after inputting their response.
+
+NOTE: AS LONG AS CLIENTS FOLLOW INSTRUCTIONS ON THE TERMINAL, THERE SHOULDN'T BE ISSUES.
+
+

@@ -39,6 +39,7 @@ Helping on select.
 
 ### 2025-01-17 - Brief description
 Decided to write my version of code with select implemented, it works! 
+fixed issues regarding odd number of players, player count becoming odd in the middle of a round, optimized make file, changed looping logic, added more error handling.
 
 ## Jason Liu
 
