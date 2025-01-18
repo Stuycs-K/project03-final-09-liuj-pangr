@@ -66,7 +66,7 @@ int main(){
     int ready = 0;
     int AWAIT = 0;
     int grouped = 0;
-    while(grouped < current){
+    while(grouped < current-1){
       while (ready < 2){
         FD_ZERO(&playerFds);
         if (AWAIT == 0){
