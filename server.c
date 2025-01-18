@@ -57,6 +57,7 @@ int main(){
     printf("total %d\n", current);
     int passed = -1;
     if (alive % 2 != 0){
+      printf("hit\n");
       for (int i = 0; i < current; i ++){
         if (list[current].status == ALIVE){
           write(list[current].downstream, &passCode, 4);
