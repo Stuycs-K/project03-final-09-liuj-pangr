@@ -10,7 +10,7 @@
 #define WIN 300
 #define TIE 400
 #define LOSE 500
-#define PAIRED 202
+#define PASS 202
 
 #ifndef RPS_H
 #define RPS_H

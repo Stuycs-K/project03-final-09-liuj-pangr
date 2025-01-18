@@ -34,6 +34,9 @@ int main(){
       printf("You are the winner to this tournament!! Congratulations!!\n");
       exit(0);
     }
+    else if (message == PASS) {
+      printf("You got a free pass! No opponent this round.\n");
+    }
     message = -1;
   }
 

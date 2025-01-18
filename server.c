@@ -48,24 +48,31 @@ int main(){
   int winCode = WIN;
   int loseCode = LOSE;
   int tieCode = TIE;
+  int passCode = PASS;
   int alive = current;
   char buffplayers[current][20];
+  int passed = -1;
+  if (current % 2 != 0){
+    write(list[current-1].downstream, &passCode, 4);
+    passed = current-1;
+  }
   while (alive > 1){
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
     
     for (int i = 0; i < current; i ++){
-      if (list[i].status == ALIVE){
+      if (list[i].status == ALIVE && i != passed){
         memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
         write(list[i].downstream, &connectCode, 4);
       }
     }
+    passed = -1;
     
     int activePlayers[2];
     int ready = 0;
     int AWAIT = 0;
     int grouped = 0;
-    while(grouped < current-1){
+    while(grouped < current){
       while (ready < 2){
         FD_ZERO(&playerFds);
         if (AWAIT == 0){
@@ -101,8 +108,8 @@ int main(){
         write(list[activePlayers[0]].downstream, &connectCode, 4);
         write(list[activePlayers[1]].downstream, &connectCode, 4);
 
-        int ready = 0;
-        while(ready < 2){
+        int tieReady = 0;
+        while(tieReady < 2){
           FD_SET(list[activePlayers[0]].upstream, &tieSet);
           FD_SET(list[activePlayers[1]].upstream, &tieSet);
           int selectStatus = select(list[current-1].upstream + 1, &tieSet, NULL, NULL, NULL);
@@ -110,7 +117,7 @@ int main(){
           for (int i = 0; i < current; i ++){
             if (FD_ISSET(list[i].upstream, &tieSet)){
               read(list[i].upstream, buffplayers[i], 19);
-              ready++;
+              tieReady++;
               break;
             }
           }
