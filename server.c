@@ -51,14 +51,20 @@ int main(){
   int passCode = PASS;
   int alive = current;
   char buffplayers[current][20];
-  int passed = -1;
-  if (current % 2 != 0){
-    write(list[current-1].downstream, &passCode, 4);
-    passed = current-1;
-  }
+  
   while (alive > 1){
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
+    int passed = -1;
+    if (alive % 2 != 0){
+      for (int i = 0; i < current; i ++){
+        if (list[current].status == ALIVE){
+          write(list[current].downstream, &passCode, 4);
+          passed = current;
+          break;
+        }
+      }
+    }
     
     for (int i = 0; i < current; i ++){
       if (list[i].status == ALIVE && i != passed){
@@ -72,7 +78,7 @@ int main(){
     int ready = 0;
     int AWAIT = 0;
     int grouped = 0;
-    while(grouped < current){
+    while(grouped < alive){
       while (ready < 2){
         FD_ZERO(&playerFds);
         if (AWAIT == 0){
