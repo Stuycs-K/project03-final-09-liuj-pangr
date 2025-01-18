@@ -106,7 +106,7 @@ int main(){
           }
         }
       }
-
+      if (skipped != -1) break;
       list[activePlayers[0]].paired = 1;
       list[activePlayers[1]].paired = 1;
       grouped += 2;
