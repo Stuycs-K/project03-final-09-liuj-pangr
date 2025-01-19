@@ -1,3 +1,8 @@
+// To change the number of players, edit "8" to something else.
+#define MAX_PLAYERS 8
+
+
+// ========== DO NOT EDIT ANYTHING BELOW THIS LINE ==========
 #include "handshake.h"
 #include "rps.h"
 
@@ -15,15 +20,13 @@ input their controls.
 The server will pair up the clients, and handles a bracket and loops through
 until there is one suriver left, which is the winner of the game.
 */
-#define ALIVE 1
-#define DEAD 0
 int main(){
   signal(SIGPIPE, SIGHANDLER);
   signal(SIGINT, SIGHANDLER);
   fd_set playerFds;
   FD_ZERO(&playerFds);
   int MYWKP = -1;
-  struct player * list = malloc(sizeof(struct player) * 8);
+  struct player * list = malloc(sizeof(struct player) * MAX_PLAYERS);
   char buff[LINE_SIZE];
   int current = 0;
   printf("Looking for clients? input y/n\n");
@@ -57,14 +60,14 @@ int main(){
     survivors = alive;
     printf("%d players alive\n", alive);
     printf("total %d\n", current);
-    
+
     for (int i = 0; i < current; i ++){
       if (list[i].status == ALIVE){
         memset(buffplayers[i], '\0', sizeof(buffplayers[i]));
         write(list[i].downstream, &connectCode, 4);
       }
     }
-    
+
     int activePlayers[2];
     int ready = 0;
     int AWAIT = 0;

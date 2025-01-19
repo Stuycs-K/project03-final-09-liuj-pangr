@@ -55,10 +55,3 @@ char fight(char p1, char p2){ //Finds winner of RPS game
   }
   return 'f';
 }
-
-// int main(){ // testing temp
-//   char p1 = takeInput();
-//   char p2 = takeInput();
-//   printf("P1 chose %c. P2 chose %c.\n", p1, p2);
-//   printf("Result of fight is %c.\n", fight(p1,p2));
-// }

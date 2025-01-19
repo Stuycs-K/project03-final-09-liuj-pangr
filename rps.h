@@ -4,6 +4,9 @@
 #include <string.h>
 #include <sys/select.h>
 
+#define ALIVE 1
+#define DEAD 0
+
 #define CONNECTED 0
 #define READY 200
 #define DONE 100
