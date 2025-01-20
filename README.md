@@ -9,8 +9,8 @@ Jason Liu, Renxuan Pang, Steven Luo
 
 A server that creates a tournament between joining clients, which will initiate a thrilling tournament of rock paper scissors (RPS).
 
-### Demo:
-PLACEHOLDER
+## Link to Presentation
+[https://youtu.be/G2dp3XVbBdk](https://youtu.be/G2dp3XVbBdk)
 
 ## How does the user install/compile/run the program.
 
@@ -42,6 +42,3 @@ DEFAULT MAX PLAYERS: 8
 If the game ends up resulting in an odd number of players, the last player to participate will get a free pass, skipping to the next phase after inputting their response.
 
 NOTE: AS LONG AS CLIENTS FOLLOW INSTRUCTIONS ON THE TERMINAL, THERE SHOULDN'T BE ISSUES.
-
-## Link to Presentation
-https://youtu.be/G2dp3XVbBdk
