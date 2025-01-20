@@ -42,3 +42,6 @@ DEFAULT MAX PLAYERS: 8
 If the game ends up resulting in an odd number of players, the last player to participate will get a free pass, skipping to the next phase after inputting their response.
 
 NOTE: AS LONG AS CLIENTS FOLLOW INSTRUCTIONS ON THE TERMINAL, THERE SHOULDN'T BE ISSUES.
+
+## Link to Presentation
+https://youtu.be/G2dp3XVbBdk
