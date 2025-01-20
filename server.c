@@ -32,15 +32,19 @@ int main(){
   printf("Looking for clients? input y/n\n");
   int connectCode = CONNECTED;
   while (fgets(buff, 511, stdin)){
-    if (buff[0] == 'y'){
+    if (buff[0] == 'y' && current < MAX_PLAYERS){
       list[current].downstream = server_handshake(&MYWKP);
       list[current].upstream = MYWKP;
       write(list[current].downstream, &connectCode, 4);
       list[current].status = ALIVE;
       list[current].paired = 0;
       current++;
+      if (current >= MAX_PLAYERS) {
+      	printf("The max number of players has been reached. GAME START!\n");
+      	break;
+      }
     }
-    if (buff[0] == 'n'){
+    else if (buff[0] == 'n'){
       printf("GAME START!\n");
       break;
     }
